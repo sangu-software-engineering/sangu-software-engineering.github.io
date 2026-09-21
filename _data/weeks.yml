@@ -1,66 +1,97 @@
+# The course agenda: one entry per week, in teaching order.
+# `number` is the only place week numbers are set. `key` is a stable name that
+# lessons and _includes/week.html use to refer to a week, so keep keys unchanged
+# when weeks move. `part` names the week's part in _data/parts.yml, and
+# `example` says what the running example gains that week. See AUTHORING.md.
 - number: 1
+  key: foundations
+  part: foundations-and-tooling
   title: "Software engineering and programming foundations"
   theme: "From a problem to working software"
-  categories: ["Foundations"]
   summary: "Connect the software lifecycle, quality, and professional responsibility to a small Java program. Refresh functions, values, collections, control flow, and readable code."
+  example: "A capacity check: `canSeat` and `countSuitableRooms` decide which rooms can seat a group."
   url: "/lessons/week-01/"
 - number: 2
+  key: git
+  part: foundations-and-tooling
   title: "Version control and collaborative development"
   theme: "Save, explain, and review changes"
-  categories: ["Collaboration"]
   summary: "Learn local Git before remote collaboration, branching, merging, and pull requests. Introduce code review, issue tracking, Markdown, and README documentation."
+  example: "The code moves into a Git repository with a README, and changes arrive through reviewed pull requests."
 - number: 3
+  key: build-tools
+  part: foundations-and-tooling
   title: "Build tools and dependency management"
   theme: "Make a project repeatable before it grows"
-  categories: ["Tooling"]
-  summary: "Use Maven for project structure, dependencies, compilation, and packaging. Compare Gradle and npm, mention Yarn, and introduce wrappers, scripts, lockfiles, and repeatable builds."
+  summary: "Use Maven for project structure, dependencies, and packaging, with a wrapper for repeatable builds. Add JUnit as the first dependency, turn the first lesson's checks into tests that Maven runs, and compare Gradle briefly."
+  example: "The application becomes a Maven project, and its expected-results checks become JUnit tests that run with `mvn test`."
 - number: 4
+  key: requirements
+  part: understand-and-design
   title: "Requirements and workflow modelling with UML and Mermaid"
   theme: "Describe the behaviour before building it"
-  categories: ["Requirements", "Modelling"]
   summary: "Describe stakeholder needs with clear requirements, acceptance criteria, and behavioural contracts. Introduce UML use case and activity diagrams, Mermaid flowcharts, and GitHub rendering."
+  example: "Requirements for real bookings, including two groups wanting the same room, become use cases and acceptance criteria."
 - number: 5
+  key: process
+  part: understand-and-design
   title: "Development processes and project planning"
   theme: "Turn requirements into manageable work"
-  categories: ["Process"]
   summary: "Compare development processes and organise requirements into small increments. Explore Agile, Scrum, Kanban, estimation, risk, scope changes, and team responsibilities."
+  example: "Booking features become a prioritised backlog of small increments in GitHub Issues."
 - number: 6
+  key: design
+  part: understand-and-design
   title: "Modular programming and object-oriented design"
   theme: "Give code clear responsibilities"
-  categories: ["Design", "Programming"]
   summary: "Give functions, classes, and interfaces clear responsibilities. Explore cohesion, coupling, composition, and selected SOLID principles; connect UML and Mermaid class diagrams to implementation."
+  example: "Rooms and bookings become classes, such as `Room`, `Booking`, and `BookingService`, with storage behind a `BookingRepository` interface; a class diagram describes them."
 - number: 7
+  key: testing
+  part: verify-and-improve
   title: "Behaviour, testing, and debugging"
   theme: "Observe behaviour and investigate failures"
-  categories: ["Quality"]
-  summary: "Use the Maven build from week 3 to run tests. Check functions and classes, model valid state transitions, and investigate errors with systematic debugging and regression checks."
+  summary: "Grow the first tests into deliberate test design with partitions, boundaries, and state transitions, and investigate errors with systematic debugging and regression tests."
+  example: "A booking's lifecycle becomes a state machine, with unit tests for valid and invalid transitions."
 - number: 8
+  key: quality
+  part: verify-and-improve
   title: "Code quality, safe refactoring, and continuous integration"
   theme: "Improve safely and automate checks"
-  categories: ["Quality", "Automation"]
-  summary: "Use tests to support refactoring and TDD. Examine quality metrics and coverage limits, then reuse the week 3 build setup in GitHub Actions."
+  summary: "Use tests to support refactoring and TDD. Examine quality metrics and coverage limits, then reuse the Maven build setup in GitHub Actions."
+  example: "Tests guide a refactoring, and a GitHub Actions workflow builds and tests every change."
 - number: 9
+  key: architecture
+  part: system-and-security
   title: "Architecture and component interactions"
   theme: "Connect modules into a system"
-  categories: ["Architecture"]
-  summary: "Connect modules through clear interfaces and architectural boundaries. Use component and sequence diagrams, integration tests, and quality attributes to explain system-wide decisions."
+  summary: "Split the application into layers: a small HTTP API, the booking service, and a repository that stores bookings in a database through JDBC. Use component and sequence diagrams, integration tests, and quality attributes to explain system-wide decisions."
+  example: "An HTTP API, the booking service, and a JDBC-backed `BookingRepository` become separate layers, with integration tests and a sequence diagram for making a booking."
 - number: 10
+  key: security
+  part: system-and-security
   title: "Secure and responsible software construction"
   theme: "Build with responsibility"
-  categories: ["Security"]
-  summary: "Identify threats at component boundaries and protect access, inputs, dependencies, and secrets. Address privacy, accessibility, attribution, and verification of AI-generated code."
+  summary: "Identify threats at the HTTP and database boundaries, and protect access, inputs, queries, dependencies, and secrets. Address privacy, accessibility, attribution, and verification of AI-generated code."
+  example: "Rules decide who may book or cancel, inputs are validated, database queries use parameters, and negative tests cover all three."
 - number: 11
+  key: docker
+  part: deliver-and-operate
   title: "Runtime environments, Docker, and deployment modelling"
   theme: "Make the runtime reproducible"
-  categories: ["Delivery"]
-  summary: "Understand processes and runtime configuration before introducing Docker images, containers, networks, volumes, and Compose. Map software to its runtime using deployment views."
+  summary: "Understand processes and runtime configuration before introducing Docker images, containers, networks, volumes, and Compose, which runs the application with a database service. Map software to its runtime using deployment views."
+  example: "A Dockerfile and a Compose file run the application with a database service, configured through environment variables."
 - number: 12
+  key: delivery
+  part: deliver-and-operate
   title: "DevOps, delivery pipelines, and documentation publishing"
   theme: "Release with confidence"
-  categories: ["Delivery"]
-  summary: "Extend CI into controlled delivery with versioned artifacts, quality gates, smoke tests, and rollback. Publish documentation and Mermaid diagrams on web platforms."
+  summary: "Extend CI into controlled delivery with versioned artifacts, quality gates, smoke tests, and rollback. Publish documentation and Mermaid diagrams, installing the Mermaid CLI with npm and comparing npm with Maven and Yarn."
+  example: "A delivery pipeline builds a versioned image, smoke-tests the running API, supports rollback, and exports the diagrams with the npm-based Mermaid CLI."
 - number: 13
+  key: operations
+  part: deliver-and-operate
   title: "Logging, observability, maintenance, and integrated review"
   theme: "Understand and evolve running software"
-  categories: ["Operations"]
   summary: "Diagnose running systems using logs, metrics, traces, and health checks. Manage changes, incidents, and dependencies, then review one requirement through the full lifecycle."
+  example: "Logs and a health-check endpoint make the running application observable, and the \"reserve two seats\" change is traced from requirement to release."

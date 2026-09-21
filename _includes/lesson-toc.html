@@ -1,7 +1,17 @@
+{%- comment -%}
+  The "On this page" menu, built from the chapter's level-2 headings so its
+  labels always match them. Give each ## heading an explicit id, such as
+  {: #learning-goals }, so links keep working when the wording changes.
+{%- endcomment -%}
 <nav aria-label="Lesson sections">
   <ol class="mt-3 space-y-1 border-l border-stone-200 text-sm">
-    {% for section in page.sections %}
-    <li><a class="-ml-px block border-l border-transparent py-1 pl-3 text-stone-600 hover:border-stone-400 hover:text-stone-900" href="#{{ section.id }}">{{ section.title }}</a></li>
-    {% endfor %}
+    {%- assign toc_headings = content | split: '<h2 id="' -%}
+    {%- for toc_heading in toc_headings offset: 1 -%}
+    {%- assign toc_id = toc_heading | split: '"' | first -%}
+    {%- assign toc_inner = toc_heading | split: '</h2>' | first -%}
+    {%- assign toc_attributes = toc_inner | split: '>' | first -%}
+    {%- assign toc_title = toc_inner | remove_first: toc_attributes | remove_first: '>' | strip_html | strip %}
+    <li><a class="-ml-px block border-l border-transparent py-1 pl-3 text-stone-600 hover:border-stone-400 hover:text-stone-900" href="#{{ toc_id }}">{{ toc_title }}</a></li>
+    {%- endfor %}
   </ol>
 </nav>

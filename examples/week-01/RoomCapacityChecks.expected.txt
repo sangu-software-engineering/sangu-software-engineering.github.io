@@ -1,0 +1,2 @@
+PASS: canSeat(24, 18) returned true, expected true
+PASS: canSeat(24, 24) returned true, expected true

@@ -6,13 +6,13 @@ baseurl: ""
 lang: en
 repository_url: https://github.com/sangu-software-engineering/sangu-software-engineering.github.io
 organization_url: https://github.com/sangu-software-engineering
+running_example_url: https://github.com/sangu-software-engineering/room-booking
 
 exclude:
   - README.md
+  - AUTHORING.md
   - Gemfile
   - Gemfile.lock
   - scripts
   - .idea
-  - .junie
-  - .build
   - "**/*.class"

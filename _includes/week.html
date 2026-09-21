@@ -1,0 +1,17 @@
+{%- comment -%}
+  Linked week reference: {% include week.html key="testing" %} renders "week 7".
+  Pass cap=true at the start of a sentence ("Week 7"). The number comes from
+  _data/weeks.yml, so reordering weeks never requires editing prose. The link
+  goes to the lesson once it is published and to the course contents before that.
+  An unknown key fails the build: the missing include's name shows the bad key.
+{%- endcomment -%}
+{%- assign week_ref = site.data.weeks | where: "key", include.key | first -%}
+{%- unless week_ref -%}{% include unknown-week-key--{{ include.key }} %}{%- endunless -%}
+{%- if week_ref.url -%}
+  {%- assign week_ref_href = week_ref.url | relative_url -%}
+{%- else -%}
+  {%- assign week_ref_anchor = week_ref.number | prepend: "0" | slice: -2, 2 -%}
+  {%- assign week_ref_href = "/#week-" | append: week_ref_anchor | relative_url -%}
+{%- endif -%}
+<a class="text-teal-700 underline underline-offset-2 hover:text-teal-900" href="{{ week_ref_href }}">{% if include.cap %}Week{% else %}week{% endif %} {{ week_ref.number }}</a>
+{%- comment -%} Whitespace control keeps the output on one line, so it also works inside Markdown tables. {%- endcomment -%}
