@@ -1,0 +1,18 @@
+title: SANGU Software Engineering
+university: SANGU University
+description: A 13-week software engineering course for computer science students, connecting requirements, Java programming, testing, design, delivery, and maintenance.
+url: https://sangu-software-engineering.github.io
+baseurl: ""
+lang: en
+repository_url: https://github.com/sangu-software-engineering/sangu-software-engineering.github.io
+organization_url: https://github.com/sangu-software-engineering
+running_example_url: https://github.com/sangu-software-engineering/room-booking
+
+exclude:
+  - README.md
+  - AUTHORING.md
+  - Gemfile
+  - Gemfile.lock
+  - scripts
+  - .idea
+  - "**/*.class"

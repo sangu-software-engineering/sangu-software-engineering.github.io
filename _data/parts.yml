@@ -1,0 +1,18 @@
+# The course's parts, in teaching order. Each week in weeks.yml names its part
+# by `key`, and a part's weeks must be consecutive. The home page groups the
+# course contents by part and works out each part's week range from weeks.yml.
+- key: foundations-and-tooling
+  title: "Foundations and tooling"
+  summary: "Refresh programming in Java, then set up the version control and build tools that later weeks rely on."
+- key: understand-and-design
+  title: "Understand and design"
+  summary: "Describe user needs, plan small increments, and give software clear responsibilities."
+- key: verify-and-improve
+  title: "Verify and improve"
+  summary: "Test behaviour, investigate failures, and improve code safely with automated checks."
+- key: system-and-security
+  title: "System and security"
+  summary: "Connect modules into a system, then build it securely and responsibly."
+- key: deliver-and-operate
+  title: "Deliver and operate"
+  summary: "Create reproducible environments, automate releases, and diagnose running systems."

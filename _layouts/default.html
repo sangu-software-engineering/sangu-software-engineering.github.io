@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="{{ site.lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title | escape }} · {{ site.title | escape }}</title>
+  <meta name="description" content="{{ page.description | default: site.description | escape }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    /* Markdown lessons have no classes, so their elements are styled here. */
+    @layer components {
+      .lesson { @apply leading-7 text-stone-700; }
+      .lesson > :first-child { @apply mt-0; }
+      .lesson h2 { @apply mt-12 mb-4 text-2xl font-semibold text-stone-900; }
+      .lesson h3 { @apply mt-8 mb-3 text-lg font-semibold text-stone-900; }
+      .lesson :is(p, ul, ol, pre, blockquote, details) { @apply my-5; }
+      .lesson :is(blockquote, details) > * { @apply my-3; }
+      .lesson ul { @apply list-disc pl-6; }
+      .lesson ol { @apply list-decimal pl-6; }
+      .lesson li { @apply my-1.5 pl-1 marker:text-stone-400; }
+      .lesson a { @apply text-teal-700 underline underline-offset-2 hover:text-teal-900; }
+      .lesson strong { @apply font-semibold text-stone-900; }
+      .lesson :not(pre) > code { @apply rounded bg-stone-100 px-1 py-0.5 text-[0.875em] text-stone-900; }
+      .lesson pre { @apply pr-16 overflow-x-auto rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm leading-6; }
+      .lesson table { @apply w-full text-left text-sm; }
+      .lesson th { @apply border-b border-stone-300 px-3 py-2 font-semibold text-stone-900; }
+      .lesson td { @apply border-b border-stone-200 px-3 py-2 align-top; }
+      .lesson blockquote { @apply border-l-4 border-teal-600 bg-teal-50 px-4 py-1; }
+      .lesson details { @apply rounded-lg border border-stone-200 px-4 py-1; }
+      .lesson summary { @apply cursor-pointer font-medium text-stone-900; }
+
+      /* Code colors for Rouge, Jekyll's built-in syntax highlighter. */
+      .highlight :is(.c, .c1, .cm) { @apply text-stone-500 italic; }
+      .highlight :is(.k, .kc, .kd, .kn, .kr, .kt) { @apply text-violet-700; }
+      .highlight :is(.s, .s1, .s2, .sc) { @apply text-emerald-700; }
+      .highlight :is(.m, .mf, .mi) { @apply text-amber-700; }
+      .highlight :is(.nc, .nd, .nf) { @apply text-sky-700; }
+    }
+  </style>
+</head>
+<body class="bg-white text-stone-800 antialiased">
+  <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:rounded focus:bg-white focus:px-3 focus:py-2 focus:shadow" href="#main">Skip to content</a>
+  <header class="border-b border-stone-200 print:hidden">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-4 sm:px-6">
+      <a class="inline-flex items-center gap-2 font-semibold text-stone-900" href="{{ '/' | relative_url }}">
+        <i class="fa-solid fa-diagram-project text-teal-700" aria-hidden="true"></i> {{ site.title }}
+      </a>
+      <nav class="flex items-center gap-5 text-sm text-stone-600" aria-label="Main navigation">
+        <a class="inline-flex items-center gap-1.5 hover:text-teal-700" href="{{ '/#curriculum' | relative_url }}"><i class="fa-solid fa-list-ul" aria-hidden="true"></i> Course contents</a>
+        <a class="inline-flex items-center gap-1.5 hover:text-teal-700" href="{{ '/about/' | relative_url }}"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> About</a>
+        <a class="inline-flex items-center gap-1.5 hover:text-teal-700" href="{{ site.organization_url }}"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">{{ content }}</main>
+  <footer class="border-t border-stone-200 print:hidden">
+    <div class="mx-auto flex max-w-6xl flex-wrap justify-between gap-4 px-4 py-6 text-sm text-stone-500 sm:px-6">
+      <p class="inline-flex items-center gap-1.5"><i class="fa-solid fa-building-columns" aria-hidden="true"></i> {{ site.university }}</p>
+      <a class="inline-flex items-center gap-1.5 hover:text-teal-700" href="{{ site.repository_url }}"><i class="fa-brands fa-github" aria-hidden="true"></i> Course source on GitHub</a>
+    </div>
+  </footer>
+  <script>
+    // Add a copy button to every code block.
+    for (const pre of document.querySelectorAll('.highlight > pre')) {
+      pre.parentElement.classList.add('relative');
+      pre.insertAdjacentHTML('afterend', '<button type="button" class="absolute top-2 right-2 cursor-pointer rounded-md border border-stone-200 bg-white px-2 py-1 text-xs text-stone-500 hover:text-stone-900 print:hidden" title="Copy code" aria-label="Copy code"><i class="fa-regular fa-copy" aria-hidden="true"></i></button>');
+      const button = pre.nextElementSibling;
+      button.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(pre.textContent.trimEnd());
+          button.firstElementChild.className = 'fa-solid fa-check text-teal-700';
+          button.setAttribute('aria-label', 'Code copied');
+          button.title = 'Copied';
+        } catch {
+          button.setAttribute('aria-label', 'Copy unavailable; select and copy the code');
+          button.title = 'Select and copy the code manually';
+        }
+        setTimeout(() => {
+          button.firstElementChild.className = 'fa-regular fa-copy';
+          button.setAttribute('aria-label', 'Copy code');
+          button.title = 'Copy code';
+        }, 2000);
+      });
+    }
+  </script>
+  <script type="module">
+    // Draw ```mermaid code blocks as diagrams, loading Mermaid only when a page has one.
+    const blocks = document.querySelectorAll('code.language-mermaid');
+    if (blocks.length) {
+      const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
+      mermaid.initialize({ startOnLoad: false, theme: 'neutral', fontFamily: 'ui-sans-serif, system-ui, sans-serif' });
+      for (const code of blocks) {
+        const diagram = document.createElement('pre');
+        diagram.className = 'mermaid flex justify-center bg-white';
+        diagram.textContent = code.textContent;
+        code.parentElement.replaceWith(diagram);
+      }
+      await mermaid.run();
+    }
+  </script>
+</body>
+</html>
