@@ -1,0 +1,66 @@
+- number: 1
+  title: "Software engineering and programming foundations"
+  theme: "From a problem to working software"
+  categories: ["Foundations"]
+  summary: "Connect the software lifecycle, quality, and professional responsibility to a small Java program. Refresh functions, values, collections, control flow, and readable code."
+  url: "/lessons/week-01/"
+- number: 2
+  title: "Version control and collaborative development"
+  theme: "Save, explain, and review changes"
+  categories: ["Collaboration"]
+  summary: "Learn local Git before remote collaboration, branching, merging, and pull requests. Introduce code review, issue tracking, Markdown, and README documentation."
+- number: 3
+  title: "Build tools and dependency management"
+  theme: "Make a project repeatable before it grows"
+  categories: ["Tooling"]
+  summary: "Use Maven for project structure, dependencies, compilation, and packaging. Compare Gradle and npm, mention Yarn, and introduce wrappers, scripts, lockfiles, and repeatable builds."
+- number: 4
+  title: "Requirements and workflow modelling with UML and Mermaid"
+  theme: "Describe the behaviour before building it"
+  categories: ["Requirements", "Modelling"]
+  summary: "Describe stakeholder needs with clear requirements, acceptance criteria, and behavioural contracts. Introduce UML use case and activity diagrams, Mermaid flowcharts, and GitHub rendering."
+- number: 5
+  title: "Development processes and project planning"
+  theme: "Turn requirements into manageable work"
+  categories: ["Process"]
+  summary: "Compare development processes and organise requirements into small increments. Explore Agile, Scrum, Kanban, estimation, risk, scope changes, and team responsibilities."
+- number: 6
+  title: "Modular programming and object-oriented design"
+  theme: "Give code clear responsibilities"
+  categories: ["Design", "Programming"]
+  summary: "Give functions, classes, and interfaces clear responsibilities. Explore cohesion, coupling, composition, and selected SOLID principles; connect UML and Mermaid class diagrams to implementation."
+- number: 7
+  title: "Behaviour, testing, and debugging"
+  theme: "Observe behaviour and investigate failures"
+  categories: ["Quality"]
+  summary: "Use the Maven build from week 3 to run tests. Check functions and classes, model valid state transitions, and investigate errors with systematic debugging and regression checks."
+- number: 8
+  title: "Code quality, safe refactoring, and continuous integration"
+  theme: "Improve safely and automate checks"
+  categories: ["Quality", "Automation"]
+  summary: "Use tests to support refactoring and TDD. Examine quality metrics and coverage limits, then reuse the week 3 build setup in GitHub Actions."
+- number: 9
+  title: "Architecture and component interactions"
+  theme: "Connect modules into a system"
+  categories: ["Architecture"]
+  summary: "Connect modules through clear interfaces and architectural boundaries. Use component and sequence diagrams, integration tests, and quality attributes to explain system-wide decisions."
+- number: 10
+  title: "Secure and responsible software construction"
+  theme: "Build with responsibility"
+  categories: ["Security"]
+  summary: "Identify threats at component boundaries and protect access, inputs, dependencies, and secrets. Address privacy, accessibility, attribution, and verification of AI-generated code."
+- number: 11
+  title: "Runtime environments, Docker, and deployment modelling"
+  theme: "Make the runtime reproducible"
+  categories: ["Delivery"]
+  summary: "Understand processes and runtime configuration before introducing Docker images, containers, networks, volumes, and Compose. Map software to its runtime using deployment views."
+- number: 12
+  title: "DevOps, delivery pipelines, and documentation publishing"
+  theme: "Release with confidence"
+  categories: ["Delivery"]
+  summary: "Extend CI into controlled delivery with versioned artifacts, quality gates, smoke tests, and rollback. Publish documentation and Mermaid diagrams on web platforms."
+- number: 13
+  title: "Logging, observability, maintenance, and integrated review"
+  theme: "Understand and evolve running software"
+  categories: ["Operations"]
+  summary: "Diagnose running systems using logs, metrics, traces, and health checks. Manage changes, incidents, and dependencies, then review one requirement through the full lifecycle."

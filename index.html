@@ -1,0 +1,83 @@
+---
+layout: default
+title: Course contents
+---
+{% assign available = site.data.weeks | where_exp: 'week', 'week.url' %}
+<div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
+  <header>
+    <p class="inline-flex items-center gap-1.5 text-sm font-medium text-teal-700"><i class="fa-solid fa-building-columns" aria-hidden="true"></i> SANGU University · Computer Science</p>
+    <h1 class="mt-3 text-3xl font-bold tracking-tight text-stone-900">Software Engineering</h1>
+    <p class="mt-4 max-w-2xl text-lg text-stone-600">Learn to take software from a problem to a working, maintainable application. Connect requirements and design with Java programming, testing, teamwork, and reliable delivery.</p>
+    <ul class="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-stone-600">
+      <li class="inline-flex items-center gap-1.5"><i class="fa-regular fa-calendar text-teal-700" aria-hidden="true"></i> 13 weeks</li>
+      <li class="inline-flex items-center gap-1.5"><i class="fa-solid fa-puzzle-piece text-teal-700" aria-hidden="true"></i> 6 ECTS</li>
+      <li class="inline-flex items-center gap-1.5"><i class="fa-solid fa-flask text-teal-700" aria-hidden="true"></i> Engineering and Java programming</li>
+    </ul>
+    <a class="mt-6 inline-flex items-center gap-2 rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white hover:bg-teal-800" href="{{ '/lessons/week-01/' | relative_url }}">Start with Week 01 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+  </header>
+
+  <section class="mt-10 flex items-baseline gap-3 rounded-lg border border-teal-100 bg-teal-50 p-4" aria-labelledby="before-title">
+    <i class="fa-solid fa-circle-info text-teal-700" aria-hidden="true"></i>
+    <div>
+      <h2 class="font-semibold text-stone-900" id="before-title">Before you begin</h2>
+      <p class="mt-1 text-sm text-stone-700">Bring a working knowledge of variables, control flow, functions, and collections, plus B1 English for technical reading. Week 1 refreshes programming basics. Git starts in week 2, build tools in week 3, and UML and Mermaid in week 4. The agenda lists lecture topics; practical instructions are provided separately.</p>
+    </div>
+  </section>
+
+  <section class="mt-12" id="curriculum" aria-labelledby="curriculum-title">
+    <h2 class="text-2xl font-semibold text-stone-900" id="curriculum-title">Course contents</h2>
+    <p class="mt-2 text-stone-600">{{ available.size }} of {{ site.data.weeks.size }} lessons are available. The rest will be added as the course grows.</p>
+    <ol class="mt-6 divide-y divide-stone-200 border-y border-stone-200">
+      {% for week in site.data.weeks %}
+      {% assign number = week.number | prepend: '0' | slice: -2, 2 %}
+      <li class="flex gap-4 py-5" id="week-{{ number }}">
+        <span class="w-6 shrink-0 text-sm font-medium text-stone-400 tabular-nums">{{ number }}</span>
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+            <h3 class="font-semibold text-stone-900">{% if week.url %}<a class="text-teal-700 hover:underline" href="{{ week.url | relative_url }}">{{ week.title }}</a>{% else %}{{ week.title }}{% endif %}</h3>
+            {% if week.url %}
+            <span class="inline-flex items-center gap-1 rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Available</span>
+            {% else %}
+            <span class="inline-flex items-center gap-1 rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-medium text-stone-500"><i class="fa-regular fa-clock" aria-hidden="true"></i> Planned</span>
+            {% endif %}
+          </div>
+          <p class="mt-1 text-sm text-stone-500">{{ week.theme }} · {{ week.categories | join: ' / ' }}</p>
+          <p class="mt-2 text-stone-700">{{ week.summary }}</p>
+        </div>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+
+  <section class="mt-12" aria-labelledby="build-tools-title">
+    <h2 class="text-2xl font-semibold text-stone-900" id="build-tools-title">Build tools before larger applications</h2>
+    <p class="mt-3 text-stone-700">Week 3 introduces project structure, dependencies, and repeatable builds. Maven is the main tool for the Java examples; Gradle and npm provide comparisons, with Yarn introduced as an alternative. Later lessons reuse the build setup for testing in week 7 and continuous integration in week 8.</p>
+    <ul class="mt-4 space-y-2 text-sm text-stone-600">
+      <li><a class="font-semibold text-teal-700 hover:underline" href="https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html">Maven</a> — Java project layout, POM configuration, dependencies, lifecycle phases, and JAR packaging.</li>
+      <li><a class="font-semibold text-teal-700 hover:underline" href="https://docs.gradle.org/current/userguide/gradle_basics.html">Gradle</a> — tasks, plugins, build scripts, and the Gradle Wrapper.</li>
+      <li><a class="font-semibold text-teal-700 hover:underline" href="https://docs.npmjs.com/about-npm/">npm</a> — Node.js package management, project scripts, and lockfiles; scripts invoke the configured build tools.</li>
+      <li><a class="font-semibold text-teal-700 hover:underline" href="https://yarnpkg.com/getting-started">Yarn</a> — an alternative JavaScript package manager, covered briefly.</li>
+    </ul>
+  </section>
+
+  <section class="mt-12" aria-labelledby="categories-title">
+    <h2 class="text-2xl font-semibold text-stone-900" id="categories-title">Follow the software lifecycle</h2>
+    <div class="mt-5 grid gap-4 sm:grid-cols-3">
+      <div class="rounded-lg border border-stone-200 p-4">
+        <i class="fa-solid fa-industry text-xl text-teal-700" aria-hidden="true"></i>
+        <h3 class="mt-2 font-semibold text-stone-900">Understand and design</h3>
+        <p class="mt-1 text-sm text-stone-600">Describe user needs, plan small increments, and give software clear responsibilities.</p>
+      </div>
+      <div class="rounded-lg border border-stone-200 p-4">
+        <i class="fa-solid fa-puzzle-piece text-xl text-teal-700" aria-hidden="true"></i>
+        <h3 class="mt-2 font-semibold text-stone-900">Build and verify</h3>
+        <p class="mt-1 text-sm text-stone-600">Write understandable Java code, test its behaviour, and improve it safely.</p>
+      </div>
+      <div class="rounded-lg border border-stone-200 p-4">
+        <i class="fa-solid fa-comments text-xl text-teal-700" aria-hidden="true"></i>
+        <h3 class="mt-2 font-semibold text-stone-900">Deliver and maintain</h3>
+        <p class="mt-1 text-sm text-stone-600">Create reproducible environments, automate releases, and diagnose running systems.</p>
+      </div>
+    </div>
+  </section>
+</div>

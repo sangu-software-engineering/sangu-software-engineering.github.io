@@ -1,0 +1,51 @@
+---
+layout: default
+---
+<div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:grid lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-12 lg:py-10">
+  <aside class="mb-8 lg:mb-0 print:hidden">
+    <div class="lg:sticky lg:top-6">
+      <a class="inline-flex items-center gap-1.5 text-sm text-stone-600 hover:text-teal-700" href="{{ '/#curriculum' | relative_url }}"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All weeks</a>
+      <details class="mt-4 rounded-lg border border-stone-200 px-4 py-2 lg:hidden">
+        <summary class="cursor-pointer text-sm font-medium text-stone-700">On this page</summary>
+        {% include lesson-toc.html %}
+      </details>
+      <div class="mt-6 hidden lg:block">
+        <p class="text-xs font-semibold tracking-wide text-stone-500 uppercase">On this page</p>
+        {% include lesson-toc.html %}
+        <a class="mt-6 inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-teal-700" href="{{ site.repository_url }}/blob/main/{{ page.path }}"><i class="fa-brands fa-github" aria-hidden="true"></i> View source</a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="min-w-0 max-w-3xl">
+    <header class="border-b border-stone-200 pb-6">
+      <p class="text-sm font-medium text-teal-700">Week {{ page.week | prepend: '0' | slice: -2, 2 }} · {{ page.category_label }}</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight text-stone-900">{{ page.title }}</h1>
+      <p class="mt-3 text-lg text-stone-600">{{ page.description }}</p>
+      <ul class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-stone-500">
+        <li class="inline-flex items-center gap-1.5"><i class="fa-brands fa-java" aria-hidden="true"></i> Java</li>
+        <li class="inline-flex items-center gap-1.5"><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i> Chapter + code walkthrough</li>
+        <li class="inline-flex items-center gap-1.5"><i class="fa-regular fa-clock" aria-hidden="true"></i> {{ page.reading_time }} min read</li>
+      </ul>
+    </header>
+
+    <article class="lesson mt-8">
+      {{ content | replace: '<table>', '<div class="my-6 overflow-x-auto"><table>' | replace: '</table>', '</table></div>' }}
+    </article>
+
+    {% assign next_number = page.week | plus: 1 %}
+    {% assign next_week = site.data.weeks | where: 'number', next_number | first %}
+    <nav class="mt-12 border-t border-stone-200 pt-6 print:hidden" aria-label="Next lesson">
+      {% if next_week %}
+      <p class="text-sm text-stone-500">Next · Week {{ next_week.number | prepend: '0' | slice: -2, 2 }}</p>
+      <p class="mt-1 text-lg font-semibold text-stone-900">{{ next_week.title }}</p>
+      <p class="mt-1 text-sm text-stone-600">{{ next_week.summary }}</p>
+      {% endif %}
+      {% if next_week.url %}
+      <a class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:underline" href="{{ next_week.url | relative_url }}">Next lesson <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      {% else %}
+      <a class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:underline" href="{{ '/#curriculum' | relative_url }}"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to course contents</a>
+      {% endif %}
+    </nav>
+  </div>
+</div>
