@@ -6,10 +6,10 @@
 - number: 1
   key: foundations
   part: foundations-and-tooling
-  title: "Software engineering and programming foundations"
-  theme: "From a problem to working software"
-  summary: "Connect the software lifecycle, quality, and professional responsibility to a small Java program. Refresh functions, values, collections, control flow, and readable code."
-  example: "A capacity check: `canSeat` and `countSuitableRooms` decide which rooms can seat a group."
+  title: "Software engineering foundations and clean code"
+  theme: "From a problem to clean, working software"
+  summary: "Refresh Java with a small program, and connect it to the software lifecycle, estimates, and professional responsibility. Keep code easy to change with clean code, small modules, refactoring, and quality metrics."
+  example: "A pizza planner: `sumSlices` and `countPizzasNeeded` turn the guests' appetites into whole pizzas to order."
   url: "/lessons/week-01/"
 - number: 2
   key: git
@@ -24,35 +24,35 @@
   title: "Build tools and dependency management"
   theme: "Make a project repeatable before it grows"
   summary: "Use Maven for project structure, dependencies, and packaging, with a wrapper for repeatable builds. Add JUnit as the first dependency, turn the first lesson's checks into tests that Maven runs, and compare Gradle briefly."
-  example: "The application becomes a Maven project, and its expected-results checks become JUnit tests that run with `mvn test`."
+  example: "The planner becomes a Maven project, and `PizzaChecks` becomes JUnit tests that run with `mvn test`."
 - number: 4
   key: requirements
   part: understand-and-design
   title: "Requirements and workflow modelling with UML and Mermaid"
   theme: "Describe the behaviour before building it"
   summary: "Describe stakeholder needs with clear requirements, acceptance criteria, and behavioural contracts. Introduce UML use case and activity diagrams, Mermaid flowcharts, and GitHub rendering."
-  example: "Requirements for real bookings, including two groups wanting the same room, become use cases and acceptance criteria."
+  example: "Requirements for real party orders, including vegetarian guests, a budget, and who may place the order, become use cases and acceptance criteria."
 - number: 5
   key: process
   part: understand-and-design
   title: "Development processes and project planning"
   theme: "Turn requirements into manageable work"
   summary: "Compare development processes and organise requirements into small increments. Explore Agile, Scrum, Kanban, estimation, risk, scope changes, and team responsibilities."
-  example: "Booking features become a prioritised backlog of small increments in GitHub Issues."
+  example: "Party features, from vegetarian options to bill splitting, become a prioritised backlog of small increments in GitHub Issues."
 - number: 6
   key: design
   part: understand-and-design
   title: "Modular programming and object-oriented design"
   theme: "Give code clear responsibilities"
   summary: "Give functions, classes, and interfaces clear responsibilities. Explore cohesion, coupling, composition, and selected SOLID principles; connect UML and Mermaid class diagrams to implementation."
-  example: "Rooms and bookings become classes, such as `Room`, `Booking`, and `BookingService`, with storage behind a `BookingRepository` interface; a class diagram describes them."
+  example: "Guests, pizzas, and orders become classes, such as `Guest`, `Pizza`, `Order`, and `OrderService`, with storage behind an `OrderRepository` interface; a class diagram describes them."
 - number: 7
   key: testing
   part: verify-and-improve
   title: "Behaviour, testing, and debugging"
   theme: "Observe behaviour and investigate failures"
   summary: "Grow the first tests into deliberate test design with partitions, boundaries, and state transitions, and investigate errors with systematic debugging and regression tests."
-  example: "A booking's lifecycle becomes a state machine, with unit tests for valid and invalid transitions."
+  example: "An order's lifecycle (draft, placed, delivered, cancelled) becomes a state machine, with unit tests for valid and invalid transitions."
 - number: 8
   key: quality
   part: verify-and-improve
@@ -65,15 +65,15 @@
   part: system-and-security
   title: "Architecture and component interactions"
   theme: "Connect modules into a system"
-  summary: "Split the application into layers: a small HTTP API, the booking service, and a repository that stores bookings in a database through JDBC. Use component and sequence diagrams, integration tests, and quality attributes to explain system-wide decisions."
-  example: "An HTTP API, the booking service, and a JDBC-backed `BookingRepository` become separate layers, with integration tests and a sequence diagram for making a booking."
+  summary: "Split the application into layers: a small HTTP API, the order service, and a repository that stores orders in a database through JDBC. Use component and sequence diagrams, integration tests, and quality attributes to explain system-wide decisions."
+  example: "An HTTP API, the order service, and a JDBC-backed `OrderRepository` become separate layers, with integration tests and a sequence diagram for placing an order."
 - number: 10
   key: security
   part: system-and-security
   title: "Secure and responsible software construction"
   theme: "Build with responsibility"
   summary: "Identify threats at the HTTP and database boundaries, and protect access, inputs, queries, dependencies, and secrets. Address privacy, accessibility, attribution, and verification of AI-generated code."
-  example: "Rules decide who may book or cancel, inputs are validated, database queries use parameters, and negative tests cover all three."
+  example: "Rules decide who may place or cancel an order, inputs are validated, database queries use parameters, and negative tests cover all three. Allergy notes, which are health data, are deleted after the party."
 - number: 11
   key: docker
   part: deliver-and-operate
@@ -94,4 +94,4 @@
   title: "Logging, observability, maintenance, and integrated review"
   theme: "Understand and evolve running software"
   summary: "Diagnose running systems using logs, metrics, traces, and health checks. Manage changes, incidents, and dependencies, then review one requirement through the full lifecycle."
-  example: "Logs and a health-check endpoint make the running application observable, and the \"reserve two seats\" change is traced from requirement to release."
+  example: "Logs and a health-check endpoint make the running application observable, and the \"six-slice pizzas\" change is traced from requirement to release."

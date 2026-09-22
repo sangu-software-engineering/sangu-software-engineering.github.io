@@ -70,9 +70,9 @@ Architecture then connects modules into a system with an HTTP interface and a da
 ## The running example
 {: #running-example }
 
-Lessons develop one application throughout the course: a room-booking system for study groups. It starts as a small capacity check and gains one engineering technique each week, so every new idea is applied to code you already know. The first lesson also raises questions, such as who may cancel a booking and what happens when two groups want the same room, that later weeks answer.
+Lessons develop one application throughout the course: a pizza-party planner for a student club. It starts as a small calculation of how many whole pizzas to order and gains one engineering technique each week, so every new idea is applied to code you already know. The first lesson also raises questions, such as who places the order, how to feed vegetarian guests, and what the app may store about allergies, that later weeks answer.
 
-The code lives in the [room-booking repository]({{ site.running_example_url }}), with a Git tag for its state at the end of each week. `git checkout week-07` shows the application at the end of that week, and `git diff week-06 week-07` shows what the week changed. Where a week needs plumbing, such as the HTTP server or database setup, the repository supplies it, so lectures can focus on the engineering decisions.
+The code lives in the [pizza-party repository]({{ site.running_example_url }}), with a Git tag for its state at the end of each week. `git checkout week-07` shows the application at the end of that week, and `git diff week-06 week-07` shows what the week changed. Where a week needs plumbing, such as the HTTP server or database setup, the repository supplies it, so lectures can focus on the engineering decisions.
 
 | Week | The application gains |
 | --- | --- |
