@@ -6,7 +6,7 @@ Conventions for writing lessons and examples on the course website. [README.md](
 
 - **No tool before its lecture.** Lessons and laboratory materials use only tools and notation introduced in their own or an earlier week.
 - **Small steps over setup.** Favour small, understandable changes over large amounts of framework setup.
-- **A familiar domain.** Programming examples use a familiar application domain (the first lesson uses room booking) so students can focus on engineering decisions.
+- **A familiar domain.** Programming examples use a familiar application domain (the running example plans a pizza party) so students can focus on engineering decisions.
 - **One behaviour.** Working code, tests, diagrams, and documentation should describe the same behaviour.
 - **Every technique solves a problem.** Each new technique should solve an identifiable problem, and students should be able to explain its benefits, costs, and alternatives.
 - **UML is the model; Mermaid is the tool.** UML is a modelling language; Mermaid authors and renders selected diagrams as text. Do not present a general Mermaid flowchart as a formal UML activity, component, or deployment diagram.
@@ -28,9 +28,10 @@ Lessons identify their week the same way: a lesson's front matter sets `key`, no
 
 1. In `_data/weeks.yml`, insert or move entries and renumber `number` so it runs 1, 2, 3, and so on. Keep existing keys, and give a new week a `part` from `_data/parts.yml`. Each part's weeks must stay consecutive; the home page works out a part's week range from its first and last week. A week without a valid part fails the build.
 2. Update the week list in the organization profile: repository `sangu-software-engineering/.github`, file `profile/README.md`. It is the only copy of the agenda outside this repository.
-3. Optionally rename lesson files, permalinks, and example folders so their `week-NN` names match the new numbers.
-4. If the running example already has tags for weeks whose numbers changed, retag them to match: each lesson links to the tag named after its week number.
-5. Build the site and check the home page, the About page, and each lesson's header and next-lesson link.
+3. If a part or its topics change, update the "This course at a glance" table in `week-01.md`, which lists the parts and their topics.
+4. Optionally rename lesson files, permalinks, and example folders so their `week-NN` names match the new numbers.
+5. If the running example already has tags for weeks whose numbers changed, retag them to match: each lesson links to the tag named after its week number.
+6. Build the site and check the home page, the About page, and each lesson's header and next-lesson link.
 
 ## Add a chapter
 
@@ -43,7 +44,7 @@ Lessons identify their week the same way: a lesson's front matter sets `key`, no
 
 ## Extend the running example
 
-The course develops one application in the [room-booking repository](https://github.com/sangu-software-engineering/room-booking). Its `week-01` tag holds `examples/week-01/RoomCapacityDemo.java` as the first lesson presents it. For each later week:
+The course develops one application in the [pizza-party repository](https://github.com/sangu-software-engineering/pizza-party). Its `week-01` tag holds `PizzaPartyPlanner.java` as the first lesson presents it, and `PizzaChecks.java` with every valid row of the lesson's expected-results table. For each later week:
 
 1. Extend the application with that week's technique, and keep its README's run instructions current.
 2. Commit, then tag the result with the week number, for example `git tag -a week-03 -m "End of week 3: Maven build and first tests"` and `git push origin week-03`.
@@ -66,9 +67,9 @@ After an intentional change to a program, regenerate its expected output in its 
 
 ```shell
 javac *.java
-java RoomCapacityDemo > RoomCapacityDemo.expected.txt
+java PizzaPartyPlanner > PizzaPartyPlanner.expected.txt
 ```
 
 Generated `.class` files are ignored by Git. Lessons include the source and expected-output files with `include_relative`, so the displayed code and output match the downloadable examples.
 
-The "Your turn" solutions in week 1 quote code and output that depend on `RoomCapacityDemo` and `RoomCapacityChecks`. If either file changes, work through the exercises again and update the solutions.
+Week 1 quotes numbers and output that depend on `PizzaPartyPlanner`, `PizzaChecks`, and `CatMood`: in the trace after the walkthrough, the discussion notes, and the "Your turn" solutions. If any of these programs changes, work through the exercises again and update that text.

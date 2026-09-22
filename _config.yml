@@ -6,7 +6,7 @@ baseurl: ""
 lang: en
 repository_url: https://github.com/sangu-software-engineering/sangu-software-engineering.github.io
 organization_url: https://github.com/sangu-software-engineering
-running_example_url: https://github.com/sangu-software-engineering/room-booking
+running_example_url: https://github.com/sangu-software-engineering/pizza-party
 
 exclude:
   - README.md

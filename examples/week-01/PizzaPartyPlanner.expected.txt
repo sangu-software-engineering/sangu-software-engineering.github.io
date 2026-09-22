@@ -1,0 +1,5 @@
+Guests: 4
+Slices wanted: 11
+Pizzas to order: 2
+Leftover slices: 5
+Pizzas for an empty party: 0

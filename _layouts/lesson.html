@@ -7,7 +7,8 @@ layout: default
 {%- capture toc -%}{% include lesson-toc.html %}{%- endcapture -%}
 <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:grid lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-12 lg:py-10">
   <aside class="mb-8 lg:mb-0 print:hidden">
-    <div class="lg:sticky lg:top-6">
+    {%- comment -%} Long menus scroll inside the sidebar, so every entry stays reachable on short screens. {%- endcomment %}
+    <div class="lg:sticky lg:top-6 lg:-m-1 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto lg:overscroll-contain lg:p-1 lg:[scrollbar-width:thin]">
       <a class="inline-flex items-center gap-1.5 text-sm text-stone-600 hover:text-teal-700" href="{{ '/#curriculum' | relative_url }}"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All weeks</a>
       <details class="mt-4 rounded-lg border border-stone-200 px-4 py-2 lg:hidden">
         <summary class="cursor-pointer text-sm font-medium text-stone-700">On this page</summary>

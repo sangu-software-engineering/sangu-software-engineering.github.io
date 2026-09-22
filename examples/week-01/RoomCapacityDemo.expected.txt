@@ -1,5 +1,0 @@
-Capacity 12: too small or invalid
-Capacity 24: suitable
-Capacity 40: suitable
-Suitable rooms: 2
-Zero attendees accepted: false
