@@ -1,2 +1,0 @@
-PASS: countPizzasNeeded(8) returned 1, expected 1
-PASS: countPizzasNeeded(9) returned 2, expected 2

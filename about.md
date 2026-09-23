@@ -36,7 +36,7 @@ By the end of the course, you should be able to:
 ## Format and prerequisites
 {: #format }
 
-The course carries **6 ECTS** and a **150-hour workload**, including 13 lecture hours and 26 laboratory hours. Teaching combines explanations, live programming demonstrations, and hands-on practice in Java. Examples progress from small functions to collaborating modules and a deployable application. They use a familiar application domain so you can focus on engineering decisions.
+The course carries **6 ECTS** and a **150-hour workload**, including 13 lecture hours and 26 laboratory hours. Teaching combines explanations, live programming demonstrations, and hands-on practice in Java. Examples progress from small functions to collaborating modules and a deployable application. Each one is small and self-contained, so you can read it, run it, and change it on its own.
 
 You should have completed a course in a high-level programming language or object-oriented programming, and have **B1 English** for reading technical materials. You should understand variables, control flow, functions, and basic collections. {% include week.html key="foundations" cap=true %} refreshes programming foundations; classes and interfaces are revisited before object-oriented design in {% include week.html key="design" %}.
 
@@ -66,19 +66,6 @@ Topics build on one another: you learn to express behaviour before testing it, e
 Programming foundations support Git collaboration and code review. {% include week.html key="build-tools" cap=true %} then introduces project structure, dependency management, repeatable builds, and the first automated tests before modular application development. Markdown and GitHub come before Mermaid publishing. Requirements establish the behaviour that planning, design, and tests must address. Classes and interfaces precede class-level testing; tests and debugging precede refactoring and CI.
 
 Architecture then connects modules into a system with an HTTP interface and a database, and gives security analysis concrete boundaries. Runtime environments and containers precede delivery automation. Logging and maintenance build on a system you can already understand, test, and release. {% include week.html key="operations" cap=true %} combines maintenance with a brief integrated review, keeping the course at {{ site.data.weeks.size }} teaching weeks.
-
-## The running example
-{: #running-example }
-
-Lessons develop one application throughout the course: a pizza-party planner for a student club. It starts as a small calculation of how many whole pizzas to order and gains one engineering technique each week, so every new idea is applied to code you already know. The first lesson also raises questions, such as who places the order, how to feed vegetarian guests, and what the app may store about allergies, that later weeks answer.
-
-The code lives in the [pizza-party repository]({{ site.running_example_url }}), with a Git tag for its state at the end of each week. `git checkout week-07` shows the application at the end of that week, and `git diff week-06 week-07` shows what the week changed. Where a week needs plumbing, such as the HTTP server or database setup, the repository supplies it, so lectures can focus on the engineering decisions.
-
-| Week | The application gains |
-| --- | --- |
-{% for week in site.data.weeks -%}
-| {% include week.html key=week.key cap=true %} | {{ week.example }} |
-{% endfor %}
 
 ## Diagrams: UML and Mermaid
 {: #diagrams }

@@ -38,18 +38,6 @@ layout: default
       {{ content | replace: '<table>', '<div class="my-6 overflow-x-auto"><table>' | replace: '</table>', '</table></div>' }}
     </article>
 
-    {% if this_week.example %}
-    {% assign example_tag = this_week.number | prepend: '0' | slice: -2, 2 | prepend: 'week-' %}
-    <aside class="mt-12 rounded-lg border border-stone-200 bg-stone-50 p-4" aria-labelledby="running-example-title">
-      <h2 class="inline-flex items-center gap-2 font-semibold text-stone-900" id="running-example-title"><i class="fa-solid fa-code-branch text-teal-700" aria-hidden="true"></i> Running example</h2>
-      <div class="mt-1 text-sm text-stone-700">{{ this_week.example | markdownify }}</div>
-      <p class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm font-medium">
-        {% if site.running_example_url %}<a class="text-teal-700 hover:underline" href="{{ site.running_example_url }}/tree/{{ example_tag }}">Code at the {{ example_tag }} tag</a>{% endif %}
-        <a class="text-teal-700 hover:underline" href="{{ '/about/' | relative_url }}#running-example">Plan for every week</a>
-      </p>
-    </aside>
-    {% endif %}
-
     {% assign next_number = this_week.number | plus: 1 %}
     {% assign next_week = site.data.weeks | where: 'number', next_number | first %}
     {% assign previous_number = this_week.number | minus: 1 %}

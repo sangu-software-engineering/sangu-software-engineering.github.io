@@ -25,7 +25,7 @@ Ruby and Bundler only build this website; they are separate from the Java tools 
 
 ## Structure
 
-- `_data/weeks.yml` is the course agenda and the only place week numbers are set: one entry per week with its `number`, stable `key`, `part`, title, summary, and `example`, the running example's step for that week.
+- `_data/weeks.yml` is the course agenda and the only place week numbers are set: one entry per week with its `number`, stable `key`, `part`, title, and summary.
 - `_data/parts.yml` lists the course's parts, which group the weeks on the home page.
 - `index.html` renders the home page: the "Before you begin" checklist and the course contents grouped by part, with lesson availability.
 - `about.md` is the About page, at `/about/`.

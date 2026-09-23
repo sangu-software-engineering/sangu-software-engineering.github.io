@@ -1,12 +1,12 @@
 ---
 layout: lesson
 title: Software engineering foundations and clean code
-description: Plan a pizza party in Java, then discover why software engineering is more than programming, and how clean code, small modules, refactoring, and honest metrics keep software easy to change.
+description: Refresh Java with small examples, see how programming fits into the wider job of software engineering, and learn the clean-code habits that keep a program easy to read, check, and change.
 permalink: /lessons/week-01/
 key: foundations
 category_label: Foundations
 language: Java
-format: Chapter + code walkthrough + exercises
+format: Chapter + code examples + exercises
 reading_time: 40
 before_next_week: "Bring the ability to run and explain a small program; Git knowledge is not assumed."
 ---
@@ -16,23 +16,24 @@ before_next_week: "Bring the ability to run and explain a small program; Git kno
 
 By the end of this chapter, you should be able to:
 
-- Explain how programming fits into software engineering and its lifecycle.
-- Discuss scope, cost, time, and quality, and explain what makes a project hard to estimate.
-- Compile, run, and explain a small Java program.
-- Write clean code: meaningful names, small functions, useful comments, consistent conventions.
-- Remove duplicated knowledge and split a big problem into small modules.
-- Refactor code in small, checked steps.
-- Calculate cyclomatic complexity, explain maintainability, and recognise code smells.
-- Take responsibility for your work, including work done with AI help.
+- Explain how programming fits into the wider work of software engineering.
+- Say how industry-strength software differs from a student program, and why productivity and quality drive every project.
+- Talk about scope, cost, time, and quality, and say what makes a project hard to estimate.
+- Compile and run a small Java program and explain what it does.
+- Write clean code: clear names, small methods, useful comments, and the same conventions as your team.
+- Remove repeated rules from a program and split a big problem into small parts.
+- Improve code in small, safe steps (refactoring) without changing what it does.
+- Calculate cyclomatic complexity, explain maintainability, and recognise common code smells.
+- Take responsibility for your work, including code written with the help of AI.
 
-**Starting point:** you have already written programs in a high-level language. This chapter refreshes those skills in Java, with just enough syntax to follow the examples. Classes and object-oriented design get their own chapter in {% include week.html key="design" %}.
+**Starting point:** you have already written programs in some language. This chapter refreshes those skills in Java and shows just enough syntax to follow the examples. Classes and object-oriented design come in {% include week.html key="design" %}.
 
-**Route through the chapter:** set up Java, meet a delicious problem, and build a small program for it. Then learn how professionals keep code like it clean, measurable, and easy to change, and finish by extending and cleaning up code yourself. Downloading files is enough for now: Git starts in {% include week.html key="git" %}.
+**How to read it:** the examples are small and independent. Each one shows one idea, so you can try it, change it, and break it on purpose. Downloading the files is enough for now: Git starts in {% include week.html key="git" %}.
 
-## This course at a glance
+## How this course works
 {: #course-structure }
 
-Over {{ site.data.weeks.size }} weeks, we take software from "someone has a problem" to "a working, maintainable application that runs somewhere real". Each week has a chapter like this one and a lab; lab instructions and assignments are in the SANGU LMS.
+Over {{ site.data.weeks.size }} weeks, we follow software from "someone has a problem" to "a working program that other people can use and change". Every week has a chapter like this one and a lab. Lab instructions and assignments are in the SANGU LMS.
 
 | Part | Topics |
 | --- | --- |
@@ -42,24 +43,33 @@ Over {{ site.data.weeks.size }} weeks, we take software from "someone has a prob
 | System and security | Architecture, secure construction |
 | Deliver and operate | Docker, delivery pipelines, observability |
 
-Today's clean-code ideas are seeds: they grow into design principles in {% include week.html key="design" %}, deliberate tests in {% include week.html key="testing" %}, and automated quality checks in {% include week.html key="quality" %}.
+The clean-code ideas in this chapter come back later: as design principles in {% include week.html key="design" %}, as real tests in {% include week.html key="testing" %}, and as automatic quality checks in {% include week.html key="quality" %}.
 
 ## Set up your Java toolkit
 {: #java-toolkit }
 
-Do this first, so installation problems show up now rather than halfway through the chapter. The examples use **Java 21 or newer**, with no preview features or external libraries. Install a full **JDK** (Java Development Kit), not only a runtime. An IDE is convenient, but a text editor and a terminal are enough.
+Do this first, so that any installation problem appears now and not in the middle of the semester. The examples use **Java 21 or newer**, with no extra libraries. Install a full **JDK** (Java Development Kit), not only a runtime. An IDE is comfortable, but a text editor and a terminal are enough.
 
-- `javac` compiles a `.java` source file into `.class` bytecode.
-- `java` starts the Java Virtual Machine (JVM) and runs the compiled program.
+- `javac` compiles a `.java` file into a `.class` file with bytecode.
+- `java` starts the Java Virtual Machine (JVM), which runs the compiled program.
 
-Follow the official [Java getting-started guide](https://dev.java/learn/getting-started/), then check that both commands work:
+```mermaid
+flowchart LR
+    Source["HelloCourse.java<br/>source code"] -- javac --> Bytecode["HelloCourse.class<br/>bytecode"]
+    Bytecode -- java --> JVM["Java Virtual Machine"]
+    JVM --> Output["Output in your terminal"]
+```
+
+The source file is the part you edit; the class file is generated, so you never edit it. (The diagrams in this chapter are written as text and drawn by the browser. You will make your own in {% include week.html key="requirements" %}.)
+
+The official [Java getting-started guide](https://dev.java/learn/getting-started/) explains the installation. After it, check that both commands answer:
 
 ```shell
 java --version
 javac --version
 ```
 
-We compile by hand so you can see what the compiler does. In {% include week.html key="build-tools" %}, Maven will automate compiling, testing, and packaging.
+We compile by hand here, so that you can see what the compiler does. In {% include week.html key="build-tools" %}, Maven will do it for you.
 
 ### Run a first program
 
@@ -82,346 +92,434 @@ Expected output:
 {% include_relative examples/week-01/HelloCourse.expected.txt %}
 {% endhighlight %}
 
-A public class and its file share a name: `HelloCourse` lives in `HelloCourse.java`. For now, read `public static void main(String[] args)` as "the program starts here". `static` lets us call methods without creating objects, which come later. `System.out.println` prints one line, and `+` joins text with other values.
+A public class and its file must have the same name, so `HelloCourse` lives in `HelloCourse.java`. For now, read `public static void main(String[] args)` as "the program starts here". The word `static` lets us call a method without creating an object; objects come later. `System.out.println` prints one line, and `+` joins text with other values.
 
-> **Keep an eye on that `2`.** Two coffees per week? Per lecture? We will come back to it when we meet *magic numbers*.
+> Look at `lectureWeeks * 2`. Two what? Coffees per week? Per lecture? We come back to this number when we talk about *magic numbers*.
 
 ### If the program does not run
 
 | Symptom | Check first |
 | --- | --- |
-| `javac` is not recognised | Install a JDK and make sure its tools are available in your terminal. |
-| The file cannot be found | Check the current folder and the exact filename, including `.java`. |
-| The compiler reports a syntax error | Go to the reported line and look for missing braces, quotes, or semicolons. |
-| Old output still appears | Save the file and compile again before running. |
+| `javac` is not recognised | Install a JDK and make sure your terminal can find its tools. |
+| The file cannot be found | Check the current folder and the exact file name, including `.java`. |
+| The compiler shows a syntax error | Go to the line it reports and look for a missing brace, quote, or semicolon. |
+| Old output still appears | Save the file and compile it again before running. |
 
-A systematic debugging workflow follows in {% include week.html key="testing" %}.
+A step-by-step debugging method comes in {% include week.html key="testing" %}.
 
-## What are we engineering?
+## Programming is part of a bigger job
 {: #engineering-software }
 
-Your student club is throwing a party, and someone suggests a program that tells you how many pizzas to order. Easy: add up the slices, divide by eight, done. Then the questions start:
+Imagine a small request: "write a program that shows which students passed the exam". The code looks simple, but the questions start at once. Is exactly 50 a pass? What should happen with an empty list, or with a score of 150? Who may see the results? What if the pass mark changes next year? Only the first question is arithmetic; the rest are about rules, people, and what happens later.
 
-- Does Luka *really* eat five slices, or is he boasting?
-- We need 11 slices. Do we order one pizza and a bit? (Pizzerias do not sell "a bit".)
-- Is every pizza cut into 8 slices?
-- What about vegetarians, the budget, and who actually places the order?
+**Software engineering** is the work of understanding a problem, building software for it, checking that it really works, delivering it, and changing it over time, always with limited time and money. Programming is the part where decisions become something a computer can run.
 
-Only one of these questions is arithmetic. The rest are about people, rules, and responsibility.
+Two words are worth keeping apart from the beginning:
 
-**Software engineering** is the disciplined work of understanding, building, verifying, delivering, and evolving software under constraints. Programming turns the decisions into something a computer can run. Good engineering connects the code to the real problem *and* to evidence that it works.
+- **Verification:** did we build the program *right*? Does it follow the rules we agreed on?
+- **Validation:** did we build the *right* program? Do those rules actually help the people who asked?
 
-This week's program answers one narrow question: **how many whole pizzas cover these appetites?** A real ordering system would also need menus, payments, and delivery tracking. So we describe the result honestly: the program *plans* an order; it does not *place* one.
+A program can pass verification and fail validation: if the university wanted the students who may retake the exam, a perfect list of passing students is the wrong answer.
 
-### The lifecycle in one table
-{: #lifecycle }
+The work moves through the activities below. They are a vocabulary, not a straight line: one change request sends you back to the beginning.
 
-| Activity | In the pizza project |
+| Activity | Example: "who passed the exam?" |
 | --- | --- |
-| Understand the problem | Ask the club what goes wrong today: too little pizza? Too much? |
-| Specify | Agree that we order whole pizzas and cover every slice someone wants. |
-| Design | Keep "add up slices", "turn slices into pizzas", and "print results" separate. |
-| Implement | Write the Java methods. |
-| Verify | Check the tricky cases: 8 slices, 9 slices, nobody hungry. |
-| Deliver | Share the program with instructions for running it. |
-| Maintain | Update it when the pizzeria changes how it cuts pizzas. |
+| Understand the problem | Ask the lecturer what "passed" means and who reads the result. |
+| Specify | Write the rule down: a score of 50 or more is a pass. |
+| Design | Decide which small methods you need and what each one does. |
+| Implement | Write the Java code. |
+| Verify | Check the difficult cases: 49, 50, an empty list. |
+| Deliver | Give people the program and instructions for running it. |
+| Maintain | Change it when the pass mark or the report format changes. |
 
-These activities are a vocabulary, not a conveyor belt: a change request sends you straight back to specifying. Keep two words apart. **Verification** asks "did we build the thing right?", that is, does the code follow our rules? **Validation** asks "did we build the right thing?", that is, do the rules solve the real problem? A perfect pizza count still fails validation if half the guests are vegan and nobody asked. Processes that organise these activities come in {% include week.html key="process" %}.
+The arrow back is the important part: software is never "finished", it is maintained.
 
-## Cost, time, quality, and estimates
+```mermaid
+flowchart LR
+    U["Understand"] --> S["Specify"] --> D["Design"] --> I["Implement"] --> V["Verify"] --> L["Deliver"] --> M["Maintain"]
+    M -- "a change request" --> S
+```
+
+We compare development processes, which organise these activities, in {% include week.html key="process" %}.
+
+## Demo programs and industry-strength software
+{: #industry-strength }
+
+Here is a comparison from Pankaj Jalote's *A Concise Introduction to Software Engineering*, the second book of this course.
+
+A student is asked to write a Java application of about 5,000 lines. Someone who programs well can finish it in a month of part-time work, which is about half a person-month of effort. That is a speed of roughly 10,000 lines per person-month.
+
+Now give the same problem to a company that builds applications for clients. There a respectable speed is about 1,000 lines per person-month, so the same 5,000 lines take about five person-months — ten times the half person-month above. Fred Brooks's old rule of thumb says the same: the industrial version of a program costs about ten times more than the student version.
+
+Are professional programmers ten times slower? No. They are building a different thing.
+
+| | Demo or student software | Industry-strength software |
+| --- | --- | --- |
+| Purpose | Show that something works | Run a part of someone's work or daily life |
+| Users | The author and the lecturer | People who did not write it and cannot read code |
+| Written by | One person | A team, and later other teams |
+| Lifetime | Until the deadline | Years, while it keeps changing |
+| A bug means | A slightly lower grade | Lost money, lost time, sometimes danger |
+
+Three things follow from the right-hand column, and they shape the whole course:
+
+- **It is teamwork.** Large software is written by teams, so people must agree on conventions, review each other's code, and be able to work on different parts at the same time.
+- **It lives a long time.** Over the life of a program, the effort spent changing it is several times bigger than the effort of writing it the first time. Software that was not built for change becomes expensive very quickly, which is why it must be split into modules that can be changed separately.
+- **Other people read it.** Code you write today will be modified by someone else, or by you after you have forgotten everything about it. So it has to be easy to understand, not only easy to run.
+
+The programs in this chapter are demo-sized, because small examples are the fastest way to learn. The habits in this chapter are for the other kind of software.
+
+> Two more words you will meet: **system software**, such as operating systems, drivers, and compilers, sits between the hardware and the user, and **application software** is everything people choose to install and use. Applications can run on one machine, or be **distributed**, with a front end in a browser or phone and a back end on a server. Most software written today is distributed application software.
+
+## Cost, time, and quality
 {: #constraints }
 
-The dean loves your planner: "Let's use it for the freshers' party. On Friday. Oh, and add vegetarian options, bill splitting, and a live delivery map."
+Software is never written with unlimited resources. Every project balances four things:
 
-Every project balances four concerns:
-
-| Concern | Question | Pizza example |
+| Concern | Question | Typical answer |
 | --- | --- | --- |
-| Scope | What exactly are we building? | Only the planner, or payments and maps too? |
-| Time | When is it needed? | Friday, 18:00, before the guests arrive. |
-| Cost | What effort and money are available? | Two students, a few evenings, no budget. |
-| Quality | What must be true of the result? | Never under-order; clear output; easy to change. |
+| Scope | What exactly are we building? | Only the pass list, or also statistics and e-mails? |
+| Time | When is it needed? | Before the exam session starts. |
+| Cost | How much effort and money is available? | Two students, a few evenings, no budget. |
+| Quality | What must be true of the result? | Correct results, clear output, easy to change. |
 
-They pull against each other. With a fixed deadline and team, extra features must come from somewhere, and quietly lowering quality is the usual "somewhere". The honest options are to **reduce scope** (the planner now, the map later), **move the deadline**, or **add resources**. Even the last one has a catch: Fred Brooks observed that adding people to a late software project tends to make it later, because newcomers need training and everyone needs more coordination. Nine cooks cannot bake one pizza in one minute. Engineers sum it up with an old joke: "fast, cheap, good: pick two".
+These four pull against each other. If the deadline and the team stay the same, new features must come from somewhere, and the usual "somewhere" is quality — a choice that is invisible at first and expensive later. The honest options are to **reduce the scope**, **move the deadline**, or **add resources**. Even the last one has a catch: Fred Brooks noticed that adding people to a late project often makes it later, because new people need training and everybody needs more coordination. Engineers say it as a joke: "fast, cheap, good — pick two".
 
-### Estimating a project
+### The two drivers: productivity and quality
 
-Before you promise "Friday", you need an estimate. It is built from a few characteristics:
+Every project has two sides. The **consumers** — the client who pays and the users who work with the program — want high quality at a low price. The **producers**, you and your team, keep the price low by being productive. Jalote calls productivity and quality the two key drivers of a software project.
 
-- **Size:** how much there is to build, counted in lines of code (easy to count, but it rewards long-winded code), function points (the functionality users see: inputs, outputs, queries, stored data), or story points (a team's relative sizes; see {% include week.html key="process" %}).
-- **Effort:** person-hours of work.
-- **Duration:** calendar time. 40 hours of effort is not "done tomorrow" just because five people are free.
-- **Cost:** mostly effort multiplied by the cost of people's time, plus tools and servers.
-- **Uncertainty:** early in a project, estimates can easily be off several times over, in either direction. They narrow as requirements become clear, a pattern Steve McConnell calls the *cone of uncertainty*.
+**Productivity** is output per unit of effort, usually thousands of lines of code (KLOC) per person-month. It is a rough measure: more lines are not better work, and it is unfair when applied to one person. Note also that what you *deliver* is not only what you *write*. If 40 of 50 thousand lines come from ready-made libraries, your delivered productivity is much higher than your typing speed.
+
+**Quality** has many sides. The ISO standards describe eight characteristics: functionality, performance, reliability, usability, security, maintainability, compatibility, and portability. Projects give them different weights, but reliability usually comes first, and it is usually measured as **defect density**: the number of defects per 1,000 lines of delivered code. Good teams today stay under one defect per KLOC.
+
+Three things improve productivity and quality at the same time:
+
+- **Good processes and methods.** That is most of this course.
+- **Reuse.** Open source libraries and frameworks give you code that is already written and already tested by many users, so you deliver more and add fewer defects. Check the licence: permissive licences such as MIT allow almost any use, while copyleft licences such as GPL require you to publish your own code under the same licence.
+- **AI assistance.** Language models can produce code, tests, and explanations quickly, and a clear prompt with enough context makes a big difference. What they produce is still your responsibility; the [last section](#responsibility) of this chapter says what that means in practice.
+
+### Estimating
+
+An estimate is a prediction, not a promise. It is built from a few characteristics:
+
+- **Size:** how much there is to build, measured in lines of code (easy to count, but it rewards long code), function points (how much functionality the user sees), or story points (a team's own relative sizes, covered in {% include week.html key="process" %}).
+- **Effort and duration:** person-hours of work, and calendar time. They are not the same thing: 40 hours of effort is not "ready tomorrow" just because five people are free.
+- **Cost:** mostly effort multiplied by what people's time costs, plus tools and servers.
+- **Uncertainty:** at the start of a project, estimates are often wrong by several times in both directions, and they improve as the requirements become clear. Steve McConnell calls this the *cone of uncertainty*.
 
 ### Change is normal
 
-Requirements change: a new pizzeria, a new slice count, a new idea from the dean. The cost of a change depends mostly on **how many places in the code know about the thing that changed**. If "8 slices per pizza" lives in one named constant, a new pizzeria costs one line. If the number `8` is scattered across fourteen files, it costs fourteen edits and at least one forgotten one. That is why the rest of this chapter cares so much about clean, non-duplicated, modular code: it keeps change cheap.
+Requirements change: a new rule, a new report, a new idea from a lecturer. You cannot stop this, but you can make it cheap. The cost of a change depends mostly on **how many places in the code know about the thing that changed**. If the pass mark is written once, as `PASS_MARK`, a new rule costs one line. If the number `50` is copied into fourteen places, it costs fourteen edits — and one of them will be forgotten. This is the practical reason for everything else in this chapter.
 
-Quality itself has several faces: correctness, usability, maintainability, reliability, and security and privacy. Which matters most depends on the context. For our planner, correctness and maintainability come first.
-
-## Programming foundations in Java
+## A quick Java refresher
 {: #programming-foundations }
 
-With the problem framed, we can express the rule in Java. You have used these building blocks before; here is their Java form.
+You have used these building blocks before. Here is how they look in Java.
 
 ### Values and variables
 
-Every Java variable has a type. `int` holds a whole number, `boolean` holds `true` or `false`, and `String` holds text:
+Every variable has a type. `int` holds a whole number, `boolean` holds `true` or `false`, and `String` holds text.
 
 ```java
-int slicesWanted = 11;
-boolean fitsInTwoPizzas = slicesWanted <= 16;
-String favouriteTopping = "margherita";
+int score = 87;
+boolean passed = score >= 50;
+String studentName = "Nino";
 ```
 
-`=` stores a value; `==` compares two primitive values such as `int`s.
+`=` stores a value. `==` compares two simple values such as `int`s. Careful: for `String`s, use `equals` instead of `==`.
 
-### Integer division: the pizza trap
+### Methods, parameters, and return values
 
-Dividing one `int` by another gives an `int`: the remainder is thrown away. The `%` operator gives you that remainder.
-
-```java
-int fullPizzas = 11 / 8;  // 1, not 1.375
-int extraSlices = 11 % 8; // 3 slices that still need a pizza
-```
-
-Remember this. It is about to cause trouble.
-
-### Methods, conditionals, arrays, and loops
-
-A method names a computation, receives inputs through parameters, and may return a result. In `countPizzasNeeded(int slicesWanted)`, `slicesWanted` is the parameter; in the call `countPizzasNeeded(11)`, 11 is the argument. A method that *returns* its answer instead of printing it can be reused anywhere: in a message, a calculation, or a check.
-
-`if` decides whether a block runs, and `for` repeats one. An *array* is a fixed-length sequence of values of one type; the enhanced `for` loop visits each value in order:
+A method gives a piece of work a name. It can take input through parameters and give back a result with `return`:
 
 ```java
-int[] appetites = {3, 2, 5, 1};
-int totalSlices = 0;
-for (int slices : appetites) {
-    totalSlices += slices;
-}
-if (totalSlices > 16) {
-    System.out.println("That's a lot of pizza.");
+static boolean isPassing(int score) {
+    return score >= 50;
 }
 ```
 
-An empty array makes the loop run zero times, so the total stays 0.
+`score` is the parameter. In the call `isPassing(87)`, the number 87 is the argument. The method *returns* an answer instead of printing it, so any part of the program can use that answer: to print a message, to count students, or to check the rule.
 
-## A complete Java example
+### Conditionals, arrays, and loops
+
+`if` chooses whether a block runs. An *array* is a fixed-length sequence of values of the same type, and the enhanced `for` loop visits each value in order:
+
+```java
+int[] scores = {41, 50, 87};
+int total = 0;
+for (int score : scores) {
+    total += score;
+}
+if (total > 200) {
+    System.out.println("Strong group.");
+}
+```
+
+An empty array means the loop body never runs, so `total` stays 0.
+
+### Integer division
+
+Dividing one `int` by another gives an `int`, and the rest is thrown away. `%` gives you that rest:
+
+```java
+int average = 178 / 3;   // 59, not 59.33
+int remainder = 178 % 3; // 1
+```
+
+This is a classic source of wrong results that still compile.
+
+## Example code: exam scores
 {: #walkthrough }
 
-Download [PizzaPartyPlanner.java]({{ '/examples/week-01/PizzaPartyPlanner.java' | relative_url }}). Four guests want 3, 2, 5, and 1 slices, and each pizza has 8 slices.
+Download [ExamScores.java]({{ '/examples/week-01/ExamScores.java' | relative_url }}). It is small on purpose: one rule, one loop, and one place that prints.
 
 {% highlight java %}
-{% include_relative examples/week-01/PizzaPartyPlanner.java %}
+{% include_relative examples/week-01/ExamScores.java %}
 {% endhighlight %}
 
 Compile and run it:
 
 ```shell
-javac PizzaPartyPlanner.java
-java PizzaPartyPlanner
+javac ExamScores.java
+java ExamScores
 ```
 
 Expected output:
 
 {% highlight text %}
-{% include_relative examples/week-01/PizzaPartyPlanner.expected.txt %}
+{% include_relative examples/week-01/ExamScores.expected.txt %}
 {% endhighlight %}
 
-### Trace the result
+Look at how the work is divided:
 
-`sumSlices` adds 3, 2, 5, and 1: 11 slices. In `countPizzasNeeded`, `11 / 8` is 1 with a remainder of 3, so the second `if` adds one more pizza: **2 pizzas**. They have 16 slices, so 5 are left over, and breakfast is sorted. For an empty party, `0 / 8` is 0 with no remainder: no pizza, no bill.
+- `isPassing` answers one question about one score. It is the only place that knows the rule.
+- `countPassing` walks through the scores and asks `isPassing` about each one. It does not compare numbers itself, so the rule cannot get out of step.
+- `main` supplies the data and prints. No other method prints anything, so the other methods can be reused anywhere.
 
-Notice how the work is divided:
+`PASS_MARK` is a **named constant**. `final` means the value can never be reassigned, and the name explains what the number means. The empty array in the last line shows a useful boundary: zero scores give zero passes, because the loop body never runs.
 
-- `sumSlices` adds up the appetites.
-- `countPizzasNeeded` turns slices into whole pizzas. It is the only place that knows the rounding rule.
-- `countLeftoverSlices` *asks* `countPizzasNeeded` instead of repeating its logic.
-- `main` supplies the data and prints the results. No other method prints anything.
-
-`SLICES_PER_PIZZA` is a named constant: `final` means it can never be reassigned, and its name explains the `8`. A negative slice count makes no sense, so `countPizzasNeeded` refuses it with `throw`, which stops the program with an error message instead of quietly producing nonsense. Error handling gets proper treatment later; for now, read `throw` as "stop and complain loudly".
-
-## Checking behaviour before claiming success
+## Checking behaviour before you say "it works"
 {: #checking-behaviour }
 
 The compiler checks grammar, not meaning. This version compiles perfectly:
 
 ```java
-static int countPizzasNeeded(int slicesWanted) {
-    return slicesWanted / SLICES_PER_PIZZA;
+static boolean isPassing(int score) {
+    return score > PASS_MARK;
 }
 ```
 
-For our party, it orders 1 pizza for 11 slices. Three guests go hungry, and the program does not even blink. This is a **logic error**: the code runs, but it breaks our rule.
+It is wrong. A student with exactly 50 now fails. Nothing crashes, nothing turns red; the program simply gives a wrong answer to one student. This is a **logic error**, and only a check can catch it.
 
-Decide the expected results *from the rule*, before running the program. Otherwise, it is far too easy to explain a wrong answer away.
+Decide what you expect *from the rule*, before you look at what the program prints. Otherwise it is very easy to see a wrong result and think "ah, that is probably correct".
 
-| Slices wanted | Expected pizzas | Why |
+| Score | Expected result | Why |
 | --- | --- | --- |
-| 0 | 0 | Nobody is hungry. |
-| 1 | 1 | Even one slice needs a whole pizza. |
-| 8 | 1 | Exactly one pizza. |
-| 9 | 2 | One slice over: a second pizza. |
-| 16 | 2 | Exactly two pizzas. |
-| 17 | 3 | One slice over again. |
-| -1 | rejected | A negative appetite is a mistake. |
+| 0 | `false` | Clearly below the pass mark. |
+| 49 | `false` | One point below. |
+| 50 | `true` | Exactly the pass mark is a pass. |
+| 51 | `true` | One point above. |
+| 100 | `true` | Clearly above. |
 
-The buggy version gets only 1, 9, and 17 wrong, where a pizza is "partly needed". Rows 0, 8, and 16 give the right answer under both versions, so on their own they prove nothing. Good checks sit on **boundaries**, where a plausible mistake produces a different answer. The exercises in [Your turn](#your-turn) make these checks runnable. Automated tests arrive in {% include week.html key="build-tools" %}, and deliberate test design in {% include week.html key="testing" %}.
+Notice which row matters most. Under both versions of the rule, 0, 49, 51, and 100 give the same answer. Only the row with 50 is different, and that is exactly the mistake a tired programmer makes. Good checks sit on **boundaries**: the values where a small mistake changes the answer.
+
+In [Your turn](#your-turn) you make these checks runnable. Real automated tests arrive in {% include week.html key="build-tools" %}, and test design in {% include week.html key="testing" %}.
 
 ## What is clean code?
 {: #clean-code }
 
-Our planner works. Is that enough? Ask anyone who has opened a six-month-old project, thought "who wrote this mess?", checked, and found their own name.
+Your program works. Is that enough? Open a project you wrote six months ago and try to change it. Most programmers have thought "who wrote this?" and then discovered that it was them.
 
-**Clean code** is code that other people, including future you, can read, understand, and change safely. In *Clean Code*, Robert C. Martin collects definitions from well-known programmers: Bjarne Stroustrup, the creator of C++, says clean code "does one thing well"; Grady Booch compares it to well-written prose; Ron Jeffries adds that it passes its tests and contains no duplication.
+**Clean code** is code that other people — including you next semester — can read, understand, and change without fear. In his book *Clean Code*, Robert C. Martin collects short definitions from famous programmers: Bjarne Stroustrup, who created C++, says clean code "does one thing well"; Grady Booch says it reads like well-written prose.
 
-Why bother, if the computer does not care?
+Why should you care, if the computer does not?
 
-- **Code is read far more often than it is written.** Martin puts the ratio at well over 10 to 1, because every new line starts with reading the old ones.
-- **Mess slows everyone down.** Teams that race through the first months of a project start to crawl when every change breaks two other things. Adding people makes it worse: newcomers do not know the design, so they add more mess.
-- **Mess attracts mess.** In the "broken windows" metaphor from *The Pragmatic Programmer*, one broken window makes a building look abandoned, and soon more windows break. One ugly hack invites the next.
-- **"Later" rarely comes.** Martin quotes LeBlanc's law: *later equals never*.
+- **Code is read much more often than it is written.** Martin puts the ratio at more than 10 to 1. Every new line starts with reading old lines, so easy reading makes writing faster.
+- **Mess slows everyone down.** A team can move fast for a few months and then almost stop, because every change breaks something else. Adding more people does not help: they do not know the design and add more mess.
+- **Mess invites more mess.** *The Pragmatic Programmer* compares it to a broken window: once one window is broken, the building looks abandoned and nobody cares about the next one.
+- **"I will clean it later" usually means never.** Martin quotes LeBlanc's law: *later equals never*.
 
-Two habits follow:
+Two habits follow from this:
 
-> **The Boy Scout rule:** leave the code a little cleaner than you found it. Rename one confusing variable, split one long method, remove one duplicate. If everyone does this every time, the code cannot rot.
+> **The Boy Scout rule:** leave the code a little cleaner than you found it. Rename one unclear variable, split one long method, delete one copy. If everybody does this every time, code cannot slowly rot.
 
 > **You are an author.** Your readers are your teammates, your reviewers, and you in six months. Write for them.
 
-Clean code is not a beauty contest. It is an economic argument: it keeps the cost of the *next* change low, and in software there is always a next change.
+Clean code is not about beauty. It is about the cost of the *next* change, and there is always a next change.
 
 ## Code conventions
 {: #conventions }
 
-A **code convention**, or style guide, is a set of agreed rules for how code looks: names, braces, spacing, line length. Conventions do not make code correct; they make every file feel familiar, so readers spend their energy on the logic instead of on someone's personal style. A widely used convention for Java is the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html). Some highlights:
+A **code convention**, or style guide, is a set of agreed rules about how code looks: names, braces, spaces, line length. Conventions do not make code correct. They make every file feel familiar, so a reader can think about the logic instead of the layout.
+
+A popular convention for Java is the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html). The most important rules:
 
 | Rule | Example |
 | --- | --- |
-| Class names are `UpperCamelCase` nouns, and the file has the same name. | `PizzaPartyPlanner` in `PizzaPartyPlanner.java` |
-| Method names are `lowerCamelCase`, usually verbs. | `countPizzasNeeded`, `sendMessage` |
-| Variables and parameters are `lowerCamelCase`. | `slicesWanted`, not `slices_wanted` or `sw` |
-| Constants (`static final`, never changing) are `UPPER_SNAKE_CASE`. | `SLICES_PER_PIZZA` |
-| Acronyms are written like ordinary words. | `XmlHttpRequest`, `customerId` (not `customerID`) |
-| `if`, `else`, `for`, and `while` always use braces, even around one statement. | Never `if (isDone) stop();` |
-| One statement per line and one variable per declaration. | Not `int guests, slices;` |
-| Lines are at most 100 characters long. | Wrap long lines, or better, extract a method. |
-| Local variables are declared close to their first use. | Not all piled up at the top of a method. |
+| Class names are nouns in `UpperCamelCase`, and the file has the same name. | `ExamScores` in `ExamScores.java` |
+| Method names are `lowerCamelCase`, usually verbs. | `isPassing`, `countPassing` |
+| Variables and parameters are `lowerCamelCase`. | `passingCount`, not `passing_count` or `pc` |
+| Constants (`static final`, never changing) are `UPPER_SNAKE_CASE`. | `PASS_MARK` |
+| Short forms are written like normal words. | `XmlHttpRequest`, `customerId` (not `customerID`) |
+| `if`, `else`, `for`, and `while` always use braces, even for one statement. | Never `if (isDone) stop();` |
+| One statement per line, one variable per declaration. | Not `int a, b;` |
+| Lines are not longer than 100 characters. | Break the line, or better, extract a method. |
+| Local variables are declared where they are first used. | Not all together at the top of a method. |
 
-> **Conventions are team decisions.** Google indents with 2 spaces; this course's examples use 4, a common IDE default. *Clean Code* recommends wildcard imports such as `import java.util.*;`, while Google forbids them. Neither side is wrong. What *is* wrong is mixing styles in one project. A team picks one guide and lets a formatter apply it automatically, so nobody argues about spaces in code review.
+> **A convention is a team decision, not a law of nature.** Google indents with 2 spaces; our examples use 4, which is the default in most IDEs. *Clean Code* likes wildcard imports such as `import java.util.*;`, while Google forbids them. Neither choice is wrong. What *is* wrong is mixing styles inside one project. A team chooses one guide, and a formatter applies it automatically, so nobody argues about spaces during code review.
 
-Layout carries meaning, too. *Clean Code* suggests the **newspaper metaphor**: the big picture at the top, details further down, a blank line between ideas, and related lines kept close together.
-
-## Clean code in practice
+## Names, methods, and comments
 {: #readable-code }
 
-### Meaningful names
+### Names that tell the truth
 
-A good name tells you why something exists, what it does, and how it is used. If a name needs a comment to explain it, the name is not finished yet.
-
-```java
-// Before: the comment is doing the name's job
-int d; // days since the cat was last fed
-
-// After: the name does its own job
-int daysSinceLastMeal;
-```
-
-A few rules of thumb from *Clean Code*:
-
-- **Reveal intent.** `guests * slicesPerGuest` beats `a * b`, and `isGameOver` beats `flag`.
-- **Do not lie.** A method called `isAvailable` that only counts seats misleads everyone who calls it.
-- **Make differences meaningful.** `song1` and `song2`, or `data` and `info`, say nothing about how they differ. Try `currentSong` and `nextSong`.
-- **Use pronounceable, searchable names.** Try saying `lstUpdTmstmp` out loud in a code review. And searching for `7` finds every 7 in the project, while `MAX_LIVES` finds exactly what you want.
-
-**Magic numbers** deserve a special mention. Remember `lectureWeeks * 2` in `HelloCourse`? Two *what*? A raw number whose meaning is not obvious is a *magic number*. Give it a name:
+A good name answers three questions: why does this exist, what does it do, and how is it used? If you need a comment to explain a name, the name is not ready.
 
 ```java
-static final int COFFEES_PER_WEEK = 2;
+// Before: the comment does the work of the name
+int d; // days since the student last logged in
 
-int coffeesNeeded = lectureWeeks * COFFEES_PER_WEEK;
+// After: the name does its own work
+int daysSinceLastLogin;
 ```
 
-Some numbers explain themselves in context: `radius * 2` for a diameter does not need a constant called `TWO`.
+Compare two versions of the same method. They do exactly the same work:
 
-### Functions
+```java
+// Version 1: what does it count, and what is 50?
+static int count(int[] list1) {
+    int n = 0;
+    for (int x : list1) {
+        if (x >= 50) {
+            n++;
+        }
+    }
+    return n;
+}
 
-- **Small.** Martin's first rule of functions is that they should be small; his second is that they should be smaller than that.
-- **One thing.** If you can only describe a function with "and", as in `validateAndSaveAndEmailOrder`, it is several functions sharing one name.
-- **Few parameters.** Zero, one, or two are easy to follow; three need a good reason. `createCharacter("Nino", 12, 8, 3, true, false, "red")` is a guessing game.
-- **No flag arguments.** `printMenu(true)` announces that the function does two different things. Write `printFullMenu()` and `printVegetarianMenu()` instead.
-- **No hidden side effects.** A method called `isPizzaReady()` that also charges your card is a trap.
-- **Calculation separate from presentation.** `countPizzasNeeded` returns a number and prints nothing, so every caller can reuse it.
+// Version 2: same code, names that explain it
+static int countPassingScores(int[] scores) {
+    int passingCount = 0;
+    for (int score : scores) {
+        if (score >= PASS_MARK) {
+            passingCount++;
+        }
+    }
+    return passingCount;
+}
+```
 
-### Comments
+The structure did not change at all. Only the names did, and now the reader knows that the numbers are exam scores, that 50 is the pass mark, and that the result is a number of students.
 
-A comment should explain what the code *cannot* say. Before writing one, try to improve the code so the comment becomes unnecessary.
+A few rules of thumb:
+
+- **Show the intention.** `score >= PASS_MARK` is clearer than `s >= p`, and `isGameOver` is clearer than `flag`.
+- **Do not lie.** A method called `isAvailable` that only counts seats will confuse everyone who calls it.
+- **Make differences meaningful.** `student1` and `student2`, or `data` and `info`, do not say how they differ; `currentStudent` and `nextStudent` do.
+- **Use names you can say and search for.** Try reading `lstUpdTmstmp` out loud. And searching for `50` finds every 50 in the project, while `PASS_MARK` finds exactly what you need.
+- **One word per idea.** If `fetchStudent`, `getGroup`, and `retrieveScore` do the same kind of work, readers look for a difference that does not exist.
+
+**Magic numbers** are raw numbers whose meaning is not obvious — such as the `2` in `lectureWeeks * 2` in our first program. Give them names:
+
+```java
+int seconds = days * 86400;                    // before
+int seconds = days * SECONDS_PER_DAY;          // after
+```
+
+Some numbers explain themselves: `radius * 2` does not need a constant called `TWO`.
+
+### Small methods that do one thing
+
+- **Small.** Martin's first rule for methods is that they should be small. His second rule is that they should be smaller than that. If a method does not fit on your screen, it probably does several things.
+- **One thing.** If you can only describe a method with "and" — `validateAndSaveAndEmailOrder` — it is several methods with one name.
+- **Few parameters.** Zero, one, or two are easy; three need a good reason. `createStudent("Nino", 21, 3, true, false, "IT")` is a guessing game.
+- **No flag parameters.** `printReport(true)` tells the reader nothing; `printFullReport()` and `printShortReport()` tell them everything.
+- **No hidden surprises.** A method called `isPasswordValid` that also creates a session does something its name does not mention. That is how bugs are born.
+- **Separate calculating from printing.** `isPassing` returns a value and prints nothing, so a report, a counter, or a check can all use it.
+
+### Comments that are worth reading
+
+A comment should say what the code *cannot* say. Before you write one, try to make the code clear enough not to need it.
 
 ```java
 // Bad: repeats the code
-count++; // increase count by one
+passingCount++; // increase the counter by one
 
 // Bad: explains unclear code...
-// check whether the user can still skip
-if (!p && s >= 6) { ... }
+// check if the password is long enough
+if (p.length() >= 8) { ... }
 
 // ...so fix the code instead
-if (canSkip(isPremium, skipsThisHour)) { ... }
+if (isLongEnough(password)) { ... }
 
-// Good: explains WHY, which the code cannot express
-// The pizzeria sells whole pizzas only, so any leftover slice means one more pizza.
+// Good: explains WHY, which the code cannot show
+// The university rounds 49.5 up, so the rule uses >= and not >.
 ```
 
-Good comments explain intent and reasons, warn about consequences, or mark agreed temporary work with a searchable `TODO` that links to an issue. Bad comments repeat the code, turn into lies when the code changes, or keep **commented-out code** alive "just in case". Delete it: version control remembers it for you ({% include week.html key="git" %}).
+Good comments explain a reason, warn about a consequence, or mark agreed temporary work with a `TODO` and a link to an issue. Bad comments repeat the code, become lies after the code changes, or keep **commented-out code** alive "just in case". Delete that code: version control remembers it for you ({% include week.html key="git" %}).
 
 ## Don't repeat yourself
 {: #duplication }
 
-When one rule lives in two places, sooner or later someone updates one copy and forgets the other. That is why the **DRY** principle, *don't repeat yourself*, is one of the most important in software.
+If the same rule lives in two places, sooner or later someone changes one of them and forgets the other. The **DRY** principle — *don't repeat yourself* — says that every rule should have exactly one home.
 
-A music app lets free users skip 6 songs per hour, and the rule appears twice:
+Here the minimum password length is written twice:
 
 ```java
-static String skipButtonLabel(boolean isPremium, int skipsThisHour) {
-    if (!isPremium && skipsThisHour >= 6) {
-        return "Skip (locked)";
+static String passwordHint(String password) {
+    if (password.length() < 8) {
+        return "Your password is too short";
     }
-    return "Skip";
+    return "Looks good";
 }
 
-static void onSkipPressed(boolean isPremium, int skipsThisHour) {
-    if (!isPremium && skipsThisHour >= 6) {
-        System.out.println("No skips left! Please enjoy this ad about socks.");
+static void savePassword(String password) {
+    if (password.length() < 8) {
+        System.out.println("Rejected: too short");
     } else {
-        System.out.println("Skipping to the next song...");
+        System.out.println("Saved");
     }
 }
 ```
 
-The company lowers the limit to 5. A developer updates `onSkipPressed` and misses the button. Now, on the sixth skip, the button cheerfully says "Skip", and pressing it plays the sock ad. Users are furious, and the socks still do not sell.
+Now the university asks for 12 characters. A developer updates `savePassword` and misses `passwordHint`. The screen says "Looks good" and the save button says "Rejected". The user tries again. And again.
 
-The cure is to give the rule **one home** and let everyone ask it:
+The cure is one rule, one home:
 
 ```java
-static final int FREE_SKIPS_PER_HOUR = 6;
+static final int MIN_PASSWORD_LENGTH = 8;
 
-static boolean canSkip(boolean isPremium, int skipsThisHour) {
-    return isPremium || skipsThisHour < FREE_SKIPS_PER_HOUR;
+static boolean isLongEnough(String password) {
+    return password.length() >= MIN_PASSWORD_LENGTH;
 }
 
-static String skipButtonLabel(boolean isPremium, int skipsThisHour) {
-    if (canSkip(isPremium, skipsThisHour)) {
-        return "Skip";
+static String passwordHint(String password) {
+    if (isLongEnough(password)) {
+        return "Looks good";
     }
-    return "Skip (locked)";
+    return "Your password is too short";
 }
 ```
 
-`onSkipPressed` asks `canSkip` in the same way. Changing the limit is now one edit, and the condition has a name that explains it. The positive wording helps, too: `canSkip(...)` reads more easily than `!cannotSkip(...)`.
+```mermaid
+flowchart TB
+    subgraph before["Before: the rule is written twice"]
+        H1["passwordHint"] --> R1["length &lt; 8"]
+        S1["savePassword"] --> R2["length &lt; 8"]
+    end
+    subgraph after["After: the rule has one home"]
+        H2["passwordHint"] --> R3["isLongEnough"]
+        S2["savePassword"] --> R3
+    end
+```
 
-### Duplication or coincidence?
+`savePassword` asks `isLongEnough` in the same way. Now the rule changes in one line, and the condition has a name that explains it. Our `ExamScores` example uses the same idea: `countPassing` never compares numbers itself, it asks `isPassing`.
 
-Not every pair of look-alike lines is duplication:
+### Repetition or coincidence?
+
+Not every pair of similar lines is duplication:
 
 ```java
 static boolean canVote(int age) {
@@ -433,331 +531,355 @@ static boolean paysAdultTicket(int age) {
 }
 ```
 
-The code is identical, but the rules are not: one comes from election law, the other from a cinema's price list. If the cinema decides that adult prices start at 16, voting must not change. Ask: **if one changes, must the other change too?** If yes, it is duplication, so give it one home. If no, it is a coincidence, so leave it alone. When you are unsure, use the **rule of three**: the first time, just write it; the second time, notice the repetition; the third time, extract it.
+The code is the same, but the rules are different: one comes from election law, the other from a cinema price list. If the cinema moves its adult price to 16, voting must not change. Ask yourself: **if one changes, must the other change too?** If yes, it is duplication, so give it one home. If no, it is a coincidence, so leave it alone.
 
-## Big project, small modules
+When you are not sure, use the **rule of three**: write it the first time, notice the repetition the second time, extract it the third time.
+
+## Small modules
 {: #modules }
 
-Nobody eats a whole pizza in one bite, and nobody builds a large system in one file. Here is the dean's dream app, fully grown:
+Nobody writes a large system in one file. A large program is split into **modules**: parts with one clear job and a small, well-defined way to use them. For example, a simple notes application:
 
-```text
-pizza-party-app
-├── accounts        who is ordering
-├── menu            pizzas, sizes, prices
-├── planner         appetites → pizzas   (this week's code)
-├── bill-splitter   who owes how much
-├── payments        talks to the bank
-├── delivery        "where is my pizza?"
-└── notifications   "your pizza is 2 minutes away!"
+```mermaid
+flowchart TD
+    UI["ui<br/>screens and buttons"] --> Notes["notes<br/>create, edit, search"]
+    UI --> Accounts["accounts<br/>sign-in and permissions"]
+    Notes --> Storage["storage<br/>saving in a database"]
+    Notes --> Sync["sync<br/>talking to the server"]
 ```
 
-Each **module** has one clear job and a small, well-defined way for other parts to use it. The planner offers `countPizzasNeeded`; the bill splitter does not need to know *how* it rounds. Good modules have two properties that you will study properly in {% include week.html key="design" %}:
+An arrow means "uses". Notice how few arrows there are: that is the goal.
 
-- **High cohesion:** everything inside a module belongs together. Prices live in `menu`, not scattered across `payments` and `delivery`.
-- **Low coupling:** modules know as little as possible about each other's insides. If `delivery` switches map providers, `menu` should not notice.
+Good modules have two properties, which you will study properly in {% include week.html key="design" %}:
 
-Splitting pays off immediately. You can think about one small piece at a time; different people can build different modules at once; and small pieces are far easier to estimate. "How long will the whole app take?" is a wild guess, but "how long will the bill splitter take?" has an answer.
+- **High cohesion:** everything inside one module belongs together. Everything about saving lives in `storage`.
+- **Low coupling:** a module knows as little as possible about the inside of other modules. If `storage` changes its database, `ui` should not notice.
 
-To find module boundaries, ask **what changes for different reasons**. Prices change when the pizzeria says so; the map changes when the map provider does. The same idea works at every scale: a system splits into modules, modules into classes, and classes into methods. `PizzaPartyPlanner` already does it at the smallest scale: four methods, four jobs.
+Splitting helps immediately: you think about one part at a time, several people can work at once, and small parts are much easier to estimate. "How long will the whole app take?" is a guess; "how long will sign-in take?" has an answer.
+
+How do you find the borders? Ask **what changes for different reasons**: screens change when designers change their minds, the database changes for technical reasons, so they belong to different modules. The same idea works at every size — a system into modules, a module into classes, a class into small methods. `ExamScores` already does it at the smallest size: two methods, two jobs, plus `main` for input and output.
 
 ## Refactoring
 {: #refactoring }
 
-**Refactoring** means improving the internal structure of code *without changing what it does*. Users see no difference; the next developer sees a huge one. Martin Fowler's book *Refactoring* made the practice famous and catalogues dozens of named refactorings.
+**Refactoring** means improving the structure of code *without changing what it does*. The user sees no difference; the next programmer sees a big one. Martin Fowler's book *Refactoring* made the practice popular and describes many named refactorings.
 
-Why not rewrite everything from scratch? Because it is very hard to make a brand-new version behave exactly like the old one, and the old one keeps changing in the meantime; *Clean Code* tells of a "grand redesign" race that lasted ten years. Refactor in small steps instead:
+Why not rewrite everything from the beginning? Because it is very hard to make a new version behave exactly like the old one, and the old one keeps changing while you work. Small steps are safer:
 
-1. **Have checks** that pin down the current behaviour.
+1. **Have checks** that show what the code does today.
 2. **Make one small change:** rename, extract, or simplify.
-3. **Run the checks.** If they pass, continue. If they fail, undo the last step; it was small, so undoing is cheap.
-4. **Repeat** until the code is clean enough for the next task.
+3. **Run the checks.** If they pass, continue. If they fail, undo the last step — it was small, so this costs you nothing.
+4. **Repeat** until the code is clean enough for your next task.
 
-Two more rules: **do not mix refactoring with new features**, so that when something breaks you know why; and **first make it work, then make it right**.
+```mermaid
+flowchart LR
+    A["Checks that pass today"] --> B["One small change"]
+    B --> Q{"Do the checks still pass?"}
+    Q -- yes --> K["Keep it and continue"]
+    Q -- no --> X["Undo this one step"]
+    K --> B
+    X --> B
+```
+
+Two more rules: **do not refactor and add features at the same time**, so that when something breaks you know why; and **first make it work, then make it right**.
 
 | Refactoring | What it does |
 | --- | --- |
 | Rename | Gives a variable, method, or class a name that tells the truth. |
-| Extract method | Moves a chunk of code into a method whose name explains it. |
-| Replace magic number with constant | Turns `8` into `SLICES_PER_PIZZA`. |
-| Remove flag argument | Splits `printMenu(true)` into two clearly named methods. |
-| Replace nested conditional with guard clauses | Returns early for special cases instead of nesting `if`s. |
-| Remove dead code | Deletes code that is never used or is commented out. |
+| Extract method | Moves a piece of code into a method whose name explains it. |
+| Replace magic number with constant | Turns `50` into `PASS_MARK`. |
+| Remove flag parameter | Turns `printReport(true)` into two clearly named methods. |
+| Replace nested conditionals with guard clauses | Returns early for special cases instead of nesting `if`s. |
+| Remove dead code | Deletes code that nobody calls or that is commented out. |
 
-Your IDE can do many of these safely. In IntelliJ IDEA, for example, the **Refactor** menu offers *Rename* (Shift+F6) and *Extract Method* (Ctrl+Alt+M on Windows and Linux), and both update every usage for you.
+Your IDE can do most of these for you. In IntelliJ IDEA, the **Refactor** menu has *Rename* (Shift+F6) and *Extract Method* (Ctrl+Alt+M on Windows and Linux), and they update every usage.
 
-### A refactoring, step by step
+### One refactoring, step by step
 
-A video game calculates the hero's health after a hit. It works, and it is awful:
+A lecturer's program adds a bonus to an exam score. It works, and it is painful to read:
 
 ```java
-// calc
-static int calc(int h, int d, boolean f) {
+// calculates
+static int c(int s, int b, boolean f) {
     int r;
     if (f == true) {
-        r = h - d * 2;
+        r = s + b * 2;
     } else {
-        r = h - d;
+        r = s + b;
     }
-    if (r < 0) {
-        r = 0;
+    if (r > 100) {
+        r = 100;
     }
     return r;
 }
 
-// ...three files away:
-health = calc(health, 7, true); // true?! true what?
+// ...somewhere else in the program:
+finalScore = c(score, 5, true); // true? true what?
 ```
 
-First, checks that pin down today's behaviour, decided before touching anything:
+First, write down what it does today, before touching anything:
 
-| Health | Damage | Critical hit? | Expected health |
+| Score | Bonus | Doubled? | Expected result |
 | --- | --- | --- | --- |
-| 20 | 7 | no | 13 |
-| 20 | 7 | yes | 6 |
-| 5 | 7 | no | 0 (never below zero) |
-| 5 | 7 | yes | 0 |
+| 80 | 5 | no | 85 |
+| 80 | 5 | yes | 90 |
+| 98 | 5 | no | 100 (never above 100) |
+| 98 | 5 | yes | 100 |
 
-Then, one small step at a time, running the checks after each:
+Now change one small thing at a time and run the checks after each step:
 
-1. **Rename** `calc`, `h`, `d`, and `f` to `healthAfterHit`, `health`, `damage`, and `isCriticalHit`, and delete the useless `// calc` comment.
-2. **Replace the magic number** `2` with `CRITICAL_HIT_MULTIPLIER`.
-3. **Simplify:** `isCriticalHit == true` is just `isCriticalHit`, and "subtract, but never below zero" is exactly `Math.max(0, ...)`.
-4. **Remove the flag argument:** instead of telling the method *how* to calculate damage, callers pass the actual damage.
+1. **Rename.** `c`, `s`, `b`, and `f` become `scoreWithBonus`, `score`, `bonus`, and `isEarlySubmission`. The comment `// calculates` says nothing, so it goes.
+2. **Replace the magic numbers.** `2` becomes `EARLY_BONUS_MULTIPLIER` and `100` becomes `MAX_SCORE`.
+3. **Simplify.** `isEarlySubmission == true` is just `isEarlySubmission`, and "add, but never go above the maximum" is exactly `Math.min`.
+4. **Remove the flag parameter.** Instead of telling the method *how* to calculate the bonus, the caller passes the bonus it wants.
+
+The result:
 
 ```java
-static final int CRITICAL_HIT_MULTIPLIER = 2;
-static final int SWORD_DAMAGE = 7;
+static final int MAX_SCORE = 100;
+static final int EARLY_BONUS_MULTIPLIER = 2;
 
-static int criticalDamage(int baseDamage) {
-    return baseDamage * CRITICAL_HIT_MULTIPLIER;
+static int doubleBonus(int bonus) {
+    return bonus * EARLY_BONUS_MULTIPLIER;
 }
 
-static int healthAfterHit(int health, int damage) {
-    return Math.max(0, health - damage); // health never drops below zero
+static int scoreWithBonus(int score, int bonus) {
+    return Math.min(MAX_SCORE, score + bonus);
 }
 
 // ...and the call now reads like a sentence:
-health = healthAfterHit(health, criticalDamage(SWORD_DAMAGE));
+finalScore = scoreWithBonus(score, doubleBonus(5));
 ```
 
-The checks give the same answers as before, but every name now tells the truth and each method does one thing. The next section measures how much simpler it became.
+The four checks give the same results as before. Nothing changed for the user; everything changed for the reader.
 
 ## Measuring code quality
 {: #quality-metrics }
 
-"This code feels messy" is a start, but engineers also want numbers they can compare and track. Treat every metric as a **smoke alarm, not a judge**: it tells you where to look, not what to conclude. Tools that calculate these metrics automatically arrive in {% include week.html key="quality" %}.
+"This code feels messy" is a fine start, but engineers also like numbers they can compare. Use every metric as a **smoke alarm, not a judge**: it shows you where to look, not what to think. Tools that calculate these numbers automatically come in {% include week.html key="quality" %}.
 
 ### Cyclomatic complexity
 
-**Cyclomatic complexity** (CC), introduced by Thomas McCabe in 1976, counts the independent paths through a piece of code. For one method:
+**Cyclomatic complexity** (CC) was introduced by Thomas McCabe in 1976. It counts how many independent paths go through a piece of code. For one method the recipe is simple:
 
 > **CC = number of decision points + 1**
 
-In Java, the decision points are `if`, `for`, `while`, `do`-`while`, each `case` of a `switch`, `catch`, the conditional operator `?:`, and every `&&` or `||` in a condition. A plain `else` does not count: it is the other side of an `if` you have already counted. Tools differ slightly on `&&`, `||`, and `switch`, so compare numbers from the same tool.
-
-Count the decision points in this aquapark ticket price:
+In Java, the decision points are `if`, `for`, `while`, `do`-`while`, every `case` of a `switch`, `catch`, the operator `?:`, and every `&&` or `||` inside a condition. A plain `else` adds nothing: it is the other side of an `if` you already counted. Tools count `&&`, `||`, and `switch` a little differently, so compare numbers from one tool.
 
 ```java
-static final int ADULT_PRICE = 30;       // GEL
-static final int WEEKEND_SURCHARGE = 5;  // GEL
-
-static int ticketPrice(int age, boolean isStudent, boolean isWeekend) {
-    if (age < 3) {                  // +1
-        return 0;                   // babies swim for free
+static String letterGrade(int score) {
+    if (score >= 90) {   // +1
+        return "A";
     }
-    int price = ADULT_PRICE;
-    if (age < 12 || isStudent) {    // +1 for the if, +1 for ||
-        price = price / 2;
+    if (score >= 80) {   // +1
+        return "B";
     }
-    if (isWeekend) {                // +1
-        price += WEEKEND_SURCHARGE;
+    if (score >= 70) {   // +1
+        return "C";
     }
-    return price;
+    if (score >= 50) {   // +1
+        return "D";
+    }
+    return "F";
 }
 ```
 
-Four decision points give **CC = 5**. Each path is a scenario the reader must keep in mind, and it takes 5 test cases to walk every independent path: a baby, a child, a student, an adult on a weekday, and an adult at the weekend.
+Every `if` splits the flow, so the method has five ways out:
+
+```mermaid
+flowchart TD
+    Start(["letterGrade(score)"]) --> C1{"score >= 90"}
+    C1 -- yes --> GA["return A"]
+    C1 -- no --> C2{"score >= 80"}
+    C2 -- yes --> GB["return B"]
+    C2 -- no --> C3{"score >= 70"}
+    C3 -- yes --> GC["return C"]
+    C3 -- no --> C4{"score >= 50"}
+    C4 -- yes --> GD["return D"]
+    C4 -- no --> GF["return F"]
+```
+
+Four decision points give **CC = 5**. The number is useful twice: each path is a case the reader must keep in mind, and you need five test cases to walk all five paths — one score for each grade.
 
 | Method | Decision points | CC |
 | --- | --- | --- |
-| `sumSlices` | one `for` | 2 |
-| `countPizzasNeeded` | two `if`s | 3 |
-| the game's old `calc` | two `if`s | 3 |
-| the new `healthAfterHit` | none | 1 |
+| `isPassing` | none | 1 |
+| `countPassing` | one `for`, one `if` | 3 |
+| the old `c` with the bonus | two `if`s | 3 |
+| the new `scoreWithBonus` | none | 1 |
+| `letterGrade` | four `if`s | 5 |
 
-A common rule of thumb: 1–10 is simple; 11–20 is getting complex; above 20, most teams refactor; above 50, a method is practically untestable. McCabe suggested 10 as a sensible limit, and many tools warn above 10 by default.
+A common rule of thumb: 1–10 is simple, 11–20 is getting complicated, above 20 most teams refactor, and above 50 a method is practically impossible to test. McCabe suggested 10 as a sensible limit, and many tools warn above 10 by default.
 
-> **Know your library.** Since Java 18, `Math.ceilDiv(slicesWanted, SLICES_PER_PIZZA)` rounds up for you. Using it in `countPizzasNeeded` would remove one `if` and lower its CC to 2. Replacing hand-made logic with a well-known library method is a refactoring, too.
-
-CC has a blind spot: it counts paths, not how hard they are to *read*. Ten `if`s nested inside each other have the same CC as ten `if`s in a row, yet the nested version is far harder to follow. That is why tools such as SonarQube also report *cognitive complexity*, which penalises nesting.
+CC has a blind spot: it counts paths, not how hard they are to read. Ten `if`s inside each other and ten `if`s one after another get the same CC, although the nested version is much harder to follow. This is why tools such as SonarQube also report *cognitive complexity*, which adds extra points for nesting.
 
 ### Maintainability
 
-**Maintainability** is how easily developers can understand, fix, and change software. The ISO/IEC 25010 quality model splits it into modularity, reusability, analysability (can I understand it?), modifiability (can I change it safely?), and testability (can I check it?). Everything in this chapter so far is about maintainability.
+**Maintainability** means how easily developers can understand, fix, and change software. It is one of the eight quality characteristics listed earlier, and the standards split it further into modularity, reusability, analysability (can I understand it?), modifiability (can I change it safely?), and testability (can I check it?). Everything in this chapter is a way to improve it.
 
-Some tools squeeze it into one number, the **Maintainability Index** (MI), proposed by Paul Oman and Jack Hagemeister in 1992. Visual Studio uses this version:
+Some tools put it into one number, the **Maintainability Index** (MI), proposed by Paul Oman and Jack Hagemeister in 1992. Visual Studio uses this version:
 
 ```text
 MI = max(0, (171 - 5.2 * ln(HV) - 0.23 * CC - 16.2 * ln(LOC)) * 100 / 171)
 ```
 
-HV is the *Halstead volume*, which grows with the number of operators and operands in the code; CC is the cyclomatic complexity; LOC is the number of lines of code. The result runs from 0 to 100, higher is better, and Visual Studio shows 20–100 as green, 10–19 as yellow, and 0–9 as red.
+`HV` is the *Halstead volume*, which grows with the number of operators and operands in the code; `CC` is cyclomatic complexity; `LOC` is the number of lines. The result goes from 0 to 100, and higher is better. Visual Studio shows 20–100 as green, 10–19 as yellow, and 0–9 as red.
 
-You do not need to memorise the formula, only its message: **size, branching, and a large vocabulary all make code harder to maintain.** Know its limits, too: its coefficients were fitted to industrial code from the early 1990s, and it knows nothing about names or tests, so a method full of variables called `x1` can still score well. Use it to spot trends and hot spots, never as a grade.
+Do not memorise the formula. Remember its message — **length, branching, and a large vocabulary make code harder to maintain** — and its limits: it was fitted to industrial code in the early 1990s and knows nothing about names or tests, so a method full of variables called `x1` can still get a good score. Use it to watch trends, never as a grade.
 
 ### Code smells
 
-A **code smell** is a surface hint that something deeper might be wrong. Kent Beck coined the term, Martin Fowler's *Refactoring* made it famous, and chapter 17 of *Clean Code* lists dozens more. A smell is not a bug and not proof; it is a reason to look closer, and most smells have a matching refactoring.
+A **code smell** is a surface sign that something deeper may be wrong. Kent Beck invented the term, Fowler's *Refactoring* made it famous, and chapter 17 of *Clean Code* lists dozens of them. A smell is not a bug and not proof — it is a reason to look closer. Most smells have a matching refactoring.
 
 | Smell | How it smells | Usual fix |
 | --- | --- | --- |
 | Mysterious name | `int d;`, `String s2;`, `void doStuff()` | Rename |
-| Long method | A 200-line `main` that reads input, calculates, prints, and makes coffee | Extract method |
-| Duplicated code | The same skip rule in two places | Extract a method or constant |
-| Magic number | `if (level > 42)`: why 42? | Named constant |
-| Long parameter list | `createCharacter("Nino", 12, 8, 3, true, false, "red")` | Fewer parameters; group related values |
-| Flag argument | `printMenu(true)` | Split into two methods |
-| Deep nesting ("arrow code") | `if` inside `if` inside `for` inside `if`, drifting right like an arrowhead | Guard clauses, extract method |
-| Comment as deodorant | A long comment explaining confusing code | Make the code clear, then delete the comment |
-| Dead code | Unused methods, `// oldCalc(x);` | Delete it; Git remembers |
-| Large class ("God class") | An `EverythingManager` with 3,000 lines | Split into modules |
-| Shotgun surgery | One small change needs edits in many files | Gather that knowledge in one place |
+| Long method | A 200-line `main` that reads input, calculates, and prints | Extract method |
+| Duplicated code | The same password rule in two places | Extract a method or a constant |
+| Magic number | `if (level > 42)` — why 42? | Named constant |
+| Long parameter list | `createStudent("Nino", 21, 3, true, false, "IT")` | Fewer parameters, grouped values |
+| Flag parameter | `printReport(true)` | Two methods with clear names |
+| Deep nesting | `if` inside `if` inside `for` inside `if` | Guard clauses, extract method |
+| Comment as perfume | A long comment that explains confusing code | Make the code clear, then delete the comment |
+| Dead code | Methods nobody calls, `// oldCalc(x);` | Delete it; Git remembers |
+| Large class | An `EverythingManager` with 3,000 lines | Split into modules |
+| Shotgun surgery | One small change needs edits in many files | Put that knowledge in one place |
 
-To sniff them out, **read the code aloud**: if you stumble or have to explain a name, it smells. Notice the **urge to comment**, which often means the code wants a better name or its own method. **Count indentation levels**: more than two or three in one method is a warning sign. **Notice fear**: code you are scared to change is probably tangled or unchecked. And ask for **code review**, which starts in {% include week.html key="git" %}: a colleague's nose is the best smell detector.
+How do you learn to notice them? **Read the code aloud**: if you stumble or have to explain a name, something smells. Notice the **wish to write a comment**, which often means the code needs a better name or its own method. **Count the indentation levels**: more than two or three in one method is a warning. **Notice fear**: code you are afraid to change is usually tangled or unchecked. And ask a colleague — code review, which starts in {% include week.html key="git" %}, is the best smell detector.
 
 ## Professional responsibility
 {: #responsibility }
 
-Software decides how much pizza arrives, but also who gets a loan, which medicine a patient receives, and whether a car brakes in time. That is why software engineering has a code of ethics. The [Software Engineering Code of Ethics and Professional Practice](https://www.acm.org/code-of-ethics/software-engineering-code) of the ACM and the IEEE Computer Society has eight principles. In short, software engineers should:
+Software decides who passes an exam, who gets a loan, and when a car brakes. This is why software engineering has a code of ethics. The [Software Engineering Code of Ethics and Professional Practice](https://www.acm.org/code-of-ethics/software-engineering-code) by the ACM and the IEEE Computer Society has eight principles. In short, software engineers should:
 
 1. **Public:** act in the public interest.
-2. **Client and employer:** serve their clients and employers well, consistent with the public interest.
-3. **Product:** make their products meet the highest professional standards possible.
+2. **Client and employer:** serve them well, as long as this fits the public interest.
+3. **Product:** make their products meet the highest professional standards they can.
 4. **Judgment:** keep their professional judgment honest and independent.
-5. **Management:** lead and manage software work ethically.
-6. **Profession:** protect the integrity and reputation of the profession.
-7. **Colleagues:** be fair to and supportive of their colleagues.
-8. **Self:** keep learning throughout their careers.
+5. **Management:** lead software work in an ethical way.
+6. **Profession:** protect the reputation of the profession.
+7. **Colleagues:** be fair to colleagues and support them.
+8. **Self:** keep learning all their life.
 
-What does this mean in everyday work, even on a student project?
+What does this mean in normal work, even in a student project?
 
-- **Be honest about what your software does.** Our program *plans* an order; printing "Pizza ordered!" would be a lie. Report bugs and limitations clearly, with the input and the observed result, so others can reproduce them.
-- **Defend the code, and do not promise the impossible.** *Clean Code* compares programmers to surgeons: if a patient demanded that the surgeon skip hand-washing to save time, a professional would refuse, because they understand the risk better. When scope grows and the deadline does not, say so early, calmly, and with facts.
-- **Collect only the data you need.** The planner needs slice counts, not phone numbers. If a future version asks about allergies, that is health information: decide why it is needed, who can see it, and how long it is kept *before* collecting it. Use made-up data while learning.
-- **Use AI assistance with accountability.** Where the course rules allow AI tools, you still remain responsible for what you submit. An AI that confidently writes `slicesWanted / SLICES_PER_PIZZA` has still left three guests hungry. Read, run, and check everything; record substantial assistance; never upload private data, credentials, or someone else's unpublished work; and credit other people's work.
-- **Never claim a check you did not run.** "It works on my machine" is a starting point, not evidence.
+- **Be honest about what your program does.** If it only checks a rule, do not say that the result is official. Report bugs and limits clearly, with the input and the result you saw, so that another person can repeat it.
+- **Say no when something is not possible.** *Clean Code* compares programmers with surgeons: if a patient asked a surgeon to skip washing their hands to save time, a professional would refuse, because they understand the risk better. Managers defend deadlines, and that is their job; explaining the real cost of cutting quality is yours.
+- **Use only the data you need.** A pass list needs scores, not phone numbers or health information. Use invented data while you are learning.
+- **Take responsibility for AI-generated code.** Where the course rules allow AI tools, you are still the author of what you submit. An AI that confidently writes `score > PASS_MARK` has still failed a student who got exactly 50. Read it, run it, check it, and write down where you used significant help. Never upload private data, credentials, or someone else's unpublished work.
+- **Never say you checked something that you did not check.** "It works on my computer" is a starting point, not evidence.
 
 ## Check your understanding
 {: #check-understanding }
 
-Try answering before opening the discussion notes.
+Try to answer before you open the notes.
 
 <details markdown="1">
-<summary>Why is a correct pizza count not a complete party-ordering system?</summary>
+<summary>Why does the same 5,000-line program cost about ten times more in a company than as a student project?</summary>
 
-It only plans quantities. It does not choose toppings, check the budget, place or pay for an order, or confirm the delivery. Those need more requirements and more code, and until they exist, the program's messages must not pretend otherwise.
+Because it is not the same product. The company version must work for people who did not write it, keep working for years, survive changes made by other programmers, and fail very rarely. The extra effort goes into understanding the requirements, design, review, testing, documentation, and making the code easy to change later.
 
 </details>
 
 <details markdown="1">
-<summary>An AI assistant "fixes" the rounding bug by adding 1 to the division. Which rows of the expected-results table catch it?</summary>
+<summary>Why is a score of exactly 50 the most important check?</summary>
 
-With `return slicesWanted / SLICES_PER_PIZZA + 1;`, the rows for 0, 8, and 16 fail: it orders a pizza for an empty party and an extra pizza for every exact multiple of 8. It fails exactly the rows that the truncating bug passes. Checks on *both* sides of each boundary catch both mistakes.
-
-</details>
-
-<details markdown="1">
-<summary>The dean wants three more features by the same Friday. What do you do?</summary>
-
-Explain the effect on effort, risk, and quality, and offer real choices: a smaller scope now and the rest later, a later deadline, or more people (knowing that newcomers need time to become productive). Agree on priorities openly instead of silently cutting quality.
+Because it is the boundary. The correct rule and the wrong rule with `>` give the same answer for every other score, so only this case shows the difference. Checks earn their place when a realistic mistake can make them fail.
 
 </details>
 
 <details markdown="1">
-<summary>Two methods both contain age >= 18. Should you merge them?</summary>
+<summary>Why does isPassing return a boolean instead of printing a message?</summary>
 
-Only if they express the same rule. If changing one must always change the other, it is duplication: give the rule one home. If they come from different rules, such as a voting age and a ticket price, it is a coincidence, and merging them would couple unrelated decisions.
-
-</details>
-
-<details markdown="1">
-<summary>A method has a cyclomatic complexity of 14. Is it bad code?</summary>
-
-Not necessarily, but it deserves a look. It has 14 independent paths to understand and needs 14 test cases to walk them all. Check whether it does more than one thing, whether its conditions could get names, and whether deep nesting could become guard clauses. The number is a smoke alarm, not a verdict.
+Its job is to answer one question. When it returns the answer, other code can use it: to count students, to print a message, or to check the rule. If it printed, every caller would have to repeat the comparison somewhere else.
 
 </details>
 
 <details markdown="1">
-<summary>What does the planner do when the appetites are 5 and -3? Is that acceptable?</summary>
+<summary>A lecturer asks for three more features, but the deadline stays the same. What do you do?</summary>
 
-`sumSlices` returns 2, and `countPizzasNeeded(2)` happily returns 1 pizza. A negative appetite is nonsense, but only a negative *total* is rejected, so this mistake slips through. The check belongs where individual appetites are handled: `sumSlices` should reject any negative value. Deciding where a rule lives is a design decision.
+Explain what it costs in effort, risk, and quality, and offer real choices: less scope now and the rest later, a later deadline, or more people (knowing that new people need time before they help). Agreeing silently and cutting quality only moves the problem into the future.
+
+</details>
+
+<details markdown="1">
+<summary>A method has a cyclomatic complexity of 14. Is that bad code?</summary>
+
+Not automatically, but it is worth a look. There are 14 paths to understand and 14 test cases to write. Check whether the method does more than one thing, whether the conditions could get names, and whether deep nesting could become guard clauses. The number tells you where to look, not what to conclude.
+
+</details>
+
+<details markdown="1">
+<summary>Why refactor in small steps instead of rewriting a method at once?</summary>
+
+If a check fails after a small step, you know exactly which change caused it, and undoing one small step is cheap. A big rewrite mixes many changes, so a failure can come from anywhere, and it is easy to change the behaviour without noticing.
 
 </details>
 
 ## Your turn
 {: #your-turn }
 
-These exercises build on each other, so do them in order, in the folder that holds `PizzaPartyPlanner.java`. In each one, decide the expected results **before** you run anything. A solution is hidden under each exercise; try the exercise before opening it.
+Do the exercises in order, in the folder with `ExamScores.java`. In each one, decide the expected results **before** you run anything. A solution is hidden under each exercise; try it yourself first.
 
 ### Make the checks runnable
 
-Comparing output with the table by eye is slow and easy to skip. Download [PizzaChecks.java]({{ '/examples/week-01/PizzaChecks.java' | relative_url }}) into the same folder. It calls the real `countPizzasNeeded` for each case and prints PASS or FAIL:
+Comparing output with a table by eye is slow, and it is easy to skip. Download [ExamScoreChecks.java]({{ '/examples/week-01/ExamScoreChecks.java' | relative_url }}) into the same folder. It calls the real `isPassing` method and prints PASS or FAIL for each case:
 
 {% highlight java %}
-{% include_relative examples/week-01/PizzaChecks.java %}
+{% include_relative examples/week-01/ExamScoreChecks.java %}
 {% endhighlight %}
 
-Compile both files together, then run the checks:
+Compile both files together and run the checks:
 
 ```shell
-javac PizzaPartyPlanner.java PizzaChecks.java
-java PizzaChecks
+javac ExamScores.java ExamScoreChecks.java
+java ExamScoreChecks
 ```
 
 Expected output:
 
 {% highlight text %}
-{% include_relative examples/week-01/PizzaChecks.expected.txt %}
+{% include_relative examples/week-01/ExamScoreChecks.expected.txt %}
 {% endhighlight %}
 
-1. Add a `check` call for each remaining valid row of the [expected-results table](#checking-behaviour). Compile and run again: every line should say PASS.
-2. In `countPizzasNeeded`, replace everything from `int pizzas` to `return pizzas;` with the buggy `return slicesWanted / SLICES_PER_PIZZA;`. Which checks fail, and why exactly those?
-3. Now try the AI's version, `return slicesWanted / SLICES_PER_PIZZA + 1;`. Which checks fail this time?
-4. Restore the original code before moving on.
+1. Add a `check` call for every remaining row of the [expected-results table](#checking-behaviour). Compile and run again: every line should say PASS.
+2. Change `>=` to `>` in `ExamScores.isPassing`, then compile and run the checks. Which line fails, and why only that one?
+3. Change it back before you continue.
 
-A program that compares results with expectations is the basic idea behind automated testing. In {% include week.html key="build-tools" %}, these checks become JUnit tests that Maven runs; JUnit also makes it easy to check the "rejected" row, where the method throws instead of returning.
+A program that compares results with expectations is the basic idea of automated testing. In {% include week.html key="build-tools" %}, these checks become JUnit tests that Maven runs for you.
 
 <details markdown="1">
 <summary>Check your results</summary>
 
-The four remaining valid rows:
+The three remaining rows:
 
 ```java
-check(0, 0);
-check(1, 1);
-check(16, 2);
-check(17, 3);
+check(0, false);
+check(51, true);
+check(100, true);
 ```
 
-With the truncating version, three checks fail:
+With `>` instead of `>=`, exactly one line fails:
 
 ```text
-FAIL: countPizzasNeeded(9) returned 1, expected 2
-FAIL: countPizzasNeeded(1) returned 0, expected 1
-FAIL: countPizzasNeeded(17) returned 2, expected 3
+PASS: isPassing(49) returned false, expected false
+FAIL: isPassing(50) returned false, expected true
+PASS: isPassing(0) returned false, expected false
+PASS: isPassing(51) returned true, expected true
+PASS: isPassing(100) returned true, expected true
 ```
 
-These are exactly the amounts with a remainder, which the division throws away. With the AI's version, the *other* three fail: 8, 0, and 16. Each bug hides from half of the checks, and together the checks catch both. A check earns its place when a plausible mistake can make it fail.
+Only the boundary case can see the difference between `>` and `>=`. This is also why checks with "nice" numbers such as 0 and 100 feel safe but prove very little.
 
 </details>
 
-### Six-slice pizzas
+### The pass mark moves to 55
 
-A change request arrives: the club switches to a pizzeria that cuts every pizza into **6 slices**.
+The university changes the rule: a pass now starts at 55.
 
-1. Update the expected results in `PizzaChecks` *before* touching the planner. Which existing expectations change? Add checks just inside and just outside the new boundaries.
-2. Run the checks against the unchanged planner. The updated expectations should fail, which proves that the checks now describe the new behaviour.
-3. Change the planner and run the checks until every line passes. How many lines of the planner did you change? Then run `PizzaPartyPlanner` and explain what changed in its output.
+1. Update the expected results in `ExamScoreChecks` *before* you touch `ExamScores`. Which lines change? Add checks just below and just on the new boundary.
+2. Run the checks against the unchanged program. The updated expectations should fail — that shows your checks now describe the new rule.
+3. Change `ExamScores` and run the checks until every line passes. How many lines did you change? Run `ExamScores` again and explain every line of output that is different.
 
 <details markdown="1">
 <summary>One possible solution</summary>
@@ -765,108 +887,114 @@ A change request arrives: the club switches to a pizzeria that cuts every pizza 
 The updated checks:
 
 ```java
-check(8, 2);   // changed: was 1
-check(9, 2);
-check(0, 0);
-check(1, 1);
-check(16, 3);  // changed: was 2
-check(17, 3);
-check(6, 1);   // new boundary: exactly one pizza
-check(7, 2);   // one slice over
-check(12, 2);  // exactly two pizzas
-check(13, 3);  // one slice over
+check(49, false);
+check(50, false);  // changed: 50 is no longer a pass
+check(0, false);
+check(51, false);  // changed
+check(100, true);
+check(54, false);  // just below the new pass mark
+check(55, true);   // exactly the new pass mark
 ```
 
-Against the old planner, the checks for 8, 16, 7, and 13 fail. The planner needs exactly one changed line:
+Against the old program, three of them fail: 50, 51, and 54. The program needs exactly one changed line:
 
 ```java
-static final int SLICES_PER_PIZZA = 6;
+static final int PASS_MARK = 55;
 ```
 
-Every check now passes. `PizzaPartyPlanner` still orders 2 pizzas, but they have 12 slices instead of 16, so `Leftover slices` drops from 5 to 1. The rule changed in one line because the slice count lived in exactly one named place. The checks changed in several places, and that is normal: they describe behaviour, and the behaviour changed.
+Now every check passes, and `ExamScores` prints `Score 50: failed` instead of `passed`, so `Passing scores` drops from 3 to 2. One rule, one place, one line. If the number 50 had been copied into `isPassing`, into `main`, and into the checks, you would be hunting for it in three files — and the checks would not be able to catch a mistake, because they would contain the same copy.
 
 </details>
 
-### Smell hunt at the cat café
+### Clean up a smelly method
 
-Download [CatMood.java]({{ '/examples/week-01/CatMood.java' | relative_url }}). Its parameters are the hours since the cat's last meal, the naps it has had today, and whether it is sunny. It works, but it smells:
+Download [ShippingCost.java]({{ '/examples/week-01/ShippingCost.java' | relative_url }}). It calculates the delivery price of a parcel in GEL. The parameters are the weight in grams, whether the customer wants express delivery, and whether the customer is a club member. It works, but it smells:
 
 {% highlight java %}
-{% include_relative examples/week-01/CatMood.java %}
+{% include_relative examples/week-01/ShippingCost.java %}
 {% endhighlight %}
 
 Expected output:
 
 {% highlight text %}
-{% include_relative examples/week-01/CatMood.expected.txt %}
+{% include_relative examples/week-01/ShippingCost.expected.txt %}
 {% endhighlight %}
 
-1. List every smell you can find. There are at least six.
-2. Calculate the cyclomatic complexity of `mood`.
-3. Before changing anything, write `CatMoodChecks.java` with at least four checks. Hint: the interesting boundaries are 5 versus 6 hours since the last meal, and 2 versus 3 naps. Compare strings with `equals`, not `==`.
-4. Refactor in small steps, running your checks after each one. Then calculate the cyclomatic complexity again. Did it change? What *did* change?
+1. Write down every smell you can find. There are at least six.
+2. Calculate the cyclomatic complexity of `cost`.
+3. Before you change anything, write `ShippingChecks.java` with at least four checks. The interesting weights are 1000, 1001, 5000, and 5001.
+4. Refactor in small steps and run your checks after each step. Then calculate the cyclomatic complexity again and compare.
 
 <details markdown="1">
 <summary>One possible solution</summary>
 
-The smells: mysterious names (`h`, `n`, `s`, `r`); magic numbers (`5` and `3`); a comment that says nothing; `s == true` instead of just `s`; three levels of nested `if`/`else`; commented-out code; and a result variable that starts as a meaningless `""` and is reassigned in every branch. The cyclomatic complexity is 4: three `if`s plus one.
+The smells: mysterious names (`cost`, `w`, `e`, `m`, `c`); magic numbers (1000, 5000, 5, 10, 20, 2); a comment that repeats the method name; `e == true` instead of `e`; nested `if`/`else` instead of a flat list of rules; commented-out code; a parameter `m` that nobody uses; and a flag parameter that makes the call `cost(500, true, false)` unreadable.
 
-The checks, shown after the method was renamed (your IDE's *Rename* updates them, too):
+Cyclomatic complexity: three `if`s plus one, so **CC = 4**.
+
+One possible clean version:
 
 ```java
-public class CatMoodChecks {
-    static void check(int hoursSinceMeal, int napsToday, boolean isSunny, String expected) {
-        String actual = CatMood.describeMood(hoursSinceMeal, napsToday, isSunny);
-        String status = "FAIL";
-        if (actual.equals(expected)) {
-            status = "PASS";
-        }
-        System.out.println(status + ": describeMood(" + hoursSinceMeal + ", " + napsToday + ", "
-                + isSunny + ") returned " + actual + ", expected " + expected);
-    }
+static final int LIGHT_PARCEL_GRAMS = 1000;
+static final int MEDIUM_PARCEL_GRAMS = 5000;
+static final int LIGHT_PARCEL_COST = 5;
+static final int MEDIUM_PARCEL_COST = 10;
+static final int HEAVY_PARCEL_COST = 20;
+static final int EXPRESS_MULTIPLIER = 2;
 
-    public static void main(String[] args) {
-        check(6, 4, true, "hangry");      // hunger beats sunshine
-        check(5, 4, true, "sunbathing");  // exactly 5 hours is not hangry yet
-        check(5, 2, false, "zoomies");    // 2 naps are not enough
-        check(5, 3, false, "purring");    // 3 naps: calm cat
+static int standardCost(int weightInGrams) {
+    if (weightInGrams <= LIGHT_PARCEL_GRAMS) {
+        return LIGHT_PARCEL_COST;
     }
+    if (weightInGrams <= MEDIUM_PARCEL_GRAMS) {
+        return MEDIUM_PARCEL_COST;
+    }
+    return HEAVY_PARCEL_COST;
+}
+
+static int expressCost(int weightInGrams) {
+    return standardCost(weightInGrams) * EXPRESS_MULTIPLIER;
 }
 ```
 
-The cleaned-up method, with `main` now calling `describeMood`:
+`main` now calls `standardCost(500)` and `expressCost(500)`, and prints the same four numbers as before. The checks can stay very simple, because each method now answers one question:
 
 ```java
-static final int HANGRY_AFTER_HOURS = 5;
-static final int NAPS_NEEDED_TO_CALM_DOWN = 3;
+static void check(String label, int actual, int expected) {
+    String status = "FAIL";
+    if (actual == expected) {
+        status = "PASS";
+    }
+    System.out.println(status + ": " + label + " returned " + actual + ", expected " + expected);
+}
 
-static String describeMood(int hoursSinceMeal, int napsToday, boolean isSunny) {
-    if (hoursSinceMeal > HANGRY_AFTER_HOURS) {
-        return "hangry";
-    }
-    if (isSunny) {
-        return "sunbathing";
-    }
-    if (napsToday < NAPS_NEEDED_TO_CALM_DOWN) {
-        return "zoomies";
-    }
-    return "purring";
+public static void main(String[] args) {
+    check("1000 g standard", ShippingCost.standardCost(1000), 5);
+    check("1001 g standard", ShippingCost.standardCost(1001), 10);
+    check("5000 g standard", ShippingCost.standardCost(5000), 10);
+    check("5001 g standard", ShippingCost.standardCost(5001), 20);
+    check("1000 g express", ShippingCost.expressCost(1000), 10);
 }
 ```
 
-All checks pass, and the program prints the same four moods. The cyclomatic complexity is *still* 4: the cat genuinely has four moods, and those decisions are real rules. Everything else improved: the names explain themselves, the numbers have names, the nesting went from three levels to one, and the rules read from top to bottom in order of priority. Cognitive complexity notices this improvement; cyclomatic complexity does not.
+The complexity dropped too: `standardCost` has CC 3 and `expressCost` has CC 1, because the express rule is no longer mixed with the weight rules. Both methods now have a name that says what they answer, and you can read the prices without counting braces.
 
 </details>
 
 ## Summary and key terms
 {: #summary }
 
-- Software engineering is programming plus understanding, verifying, delivering, and evolving software under constraints. Scope, time, cost, and quality pull against each other, so discuss trade-offs openly.
-- Estimates rest on size, effort, duration, cost, and uncertainty. Change is normal, and its cost depends on how many places know about the changed thing.
-- Clean code is easy to read, understand, and change: truthful names, small single-purpose functions, comments that explain *why*, and the team's conventions applied by a formatter.
-- Give each rule one home, but do not confuse coincidence with duplication. Split big systems into cohesive, loosely coupled modules.
-- Refactor in small, checked steps, never mixed with new features, and leave code cleaner than you found it.
-- CC = decision points + 1, with 10 as a common limit. The Maintainability Index shows trends. Smells are hints, not verdicts. You are accountable for what you deliver.
+- Software engineering is programming plus understanding, checking, delivering, and changing software with limited time and money.
+- Industry-strength software is a different product from a student program: it is built by teams, lives for years, and must be of high quality, so it costs roughly ten times more.
+- Productivity (delivered code per person-month) and quality (often measured as defects per KLOC) are the two drivers of a project. Good processes, reuse of open source libraries, and careful use of AI improve both.
+- Scope, time, cost, and quality pull against each other. Talk about the trade-off instead of quietly cutting quality.
+- Estimates are built from size, effort, duration, cost, and uncertainty. Change is normal, and its cost depends on how many places know about the thing that changed.
+- Clean code means honest names, small methods that do one thing, comments that explain *why*, and one shared convention applied by a formatter.
+- Every rule needs exactly one home, but similar code is not always duplication.
+- Large programs are split into modules with high cohesion and low coupling.
+- Refactor in small steps with checks after each step, never together with new features, and leave code cleaner than you found it.
+- CC = decision points + 1, and 10 is a common limit. The Maintainability Index shows trends. Smells are hints, not verdicts.
+- You are responsible for what you deliver, including code written with AI.
 
 | English | ქართული |
 | --- | --- |
@@ -885,11 +1013,10 @@ All checks pass, and the program prints the same four moods. The cyclomatic comp
 ## Further reading
 {: #further-reading }
 
-- Robert C. Martin, *Clean Code: A Handbook of Agile Software Craftsmanship*, 2008, the course's clean-code resource. Chapters 1–5 cover this week's ideas; chapter 17 catalogues smells and heuristics.
-- Martin Fowler, [Refactoring: Improving the Design of Existing Code](https://martinfowler.com/books/refactoring.html), second edition, 2018, and the online [catalogue of refactorings](https://refactoring.com/catalog/).
-- [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html): the full set of conventions summarised above.
-- Thomas J. McCabe, "A Complexity Measure", *IEEE Transactions on Software Engineering*, 1976: the original cyclomatic complexity paper.
+- Robert C. Martin, *Clean Code: A Handbook of Agile Software Craftsmanship*, 2008 — the course's clean-code book. Chapters 1–5 cover this chapter's ideas; chapter 17 is a long list of smells.
+- Martin Fowler, [Refactoring: Improving the Design of Existing Code](https://martinfowler.com/books/refactoring.html), second edition, 2018, and the free [catalogue of refactorings](https://refactoring.com/catalog/).
+- [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html) — the full set of conventions.
+- Thomas J. McCabe, "A Complexity Measure", *IEEE Transactions on Software Engineering*, 1976 — the original paper on cyclomatic complexity.
 - [Software Engineering Code of Ethics and Professional Practice](https://www.acm.org/code-of-ethics/software-engineering-code), ACM and IEEE Computer Society.
-- Frederick P. Brooks Jr., *The Mythical Man-Month*, anniversary edition, 1995: why adding people to a late project rarely helps.
-- Pankaj Jalote, [A Concise Introduction to Software Engineering: With Open Source and GenAI](https://link.springer.com/book/10.1007/978-3-031-74318-4), second edition, 2025.
-- [Getting started with Java](https://dev.java/learn/getting-started/) and [Java language basics](https://dev.java/learn/language-basics/): the official guides to the tools and the language.
+- Pankaj Jalote, [A Concise Introduction to Software Engineering: With Open Source and GenAI](https://link.springer.com/book/10.1007/978-3-031-74318-4), second edition, 2025 — chapter 1 covers industry-strength software, productivity and quality, open source reuse, and prompting.
+- [Getting started with Java](https://dev.java/learn/getting-started/) and [Java language basics](https://dev.java/learn/language-basics/) — the official guides.

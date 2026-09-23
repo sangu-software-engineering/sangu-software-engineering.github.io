@@ -1,0 +1,2 @@
+PASS: isPassing(49) returned false, expected false
+PASS: isPassing(50) returned true, expected true

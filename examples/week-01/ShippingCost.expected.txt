@@ -1,0 +1,4 @@
+500 g, standard: 5
+500 g, express: 10
+3000 g, standard: 10
+9000 g, express: 40

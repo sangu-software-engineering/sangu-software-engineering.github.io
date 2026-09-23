@@ -1,0 +1,7 @@
+Score 41: failed
+Score 50: passed
+Score 87: passed
+Score 12: failed
+Score 63: passed
+Passing scores: 3
+Empty group: 0
