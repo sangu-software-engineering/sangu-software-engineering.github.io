@@ -16,6 +16,7 @@
   title: "Version control and collaborative development"
   theme: "Save, explain, and review changes"
   summary: "Learn local Git before remote collaboration, branching, merging, and pull requests. Introduce code review, issue tracking, Markdown, and README documentation."
+  url: "/lessons/week-02/"
 - number: 3
   key: build-tools
   part: foundations-and-tooling
