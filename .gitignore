@@ -4,5 +4,6 @@ _site/
 .bundle/
 vendor/
 *.class
+target/
 .idea/
 .build/
