@@ -1,0 +1,5 @@
+Score 41, retakes used 0: may register
+Score 49, retakes used 0: may register
+Score 50, retakes used 0: may not register
+Score 41, retakes used 1: may not register
+Rejected: Score must be between 0 and 100: 101

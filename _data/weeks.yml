@@ -30,6 +30,7 @@
   title: "Requirements and workflow modelling with UML and Mermaid"
   theme: "Describe the behaviour before building it"
   summary: "Describe stakeholder needs with clear requirements, acceptance criteria, and behavioural contracts. Introduce UML use case and activity diagrams, Mermaid flowcharts, and GitHub rendering."
+  url: "/lessons/week-04/"
 - number: 5
   key: process
   part: understand-and-design
