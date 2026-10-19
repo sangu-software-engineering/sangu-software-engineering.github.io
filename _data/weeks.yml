@@ -37,6 +37,7 @@
   title: "Development processes and project planning"
   theme: "Turn requirements into manageable work"
   summary: "Compare development processes and organise requirements into small increments. Explore Agile, Scrum, Kanban, estimation, risk, scope changes, and team responsibilities."
+  url: "/lessons/week-05/"
 - number: 6
   key: design
   part: understand-and-design
