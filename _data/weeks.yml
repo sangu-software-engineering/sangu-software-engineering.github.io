@@ -44,6 +44,7 @@
   title: "Modular programming and object-oriented design"
   theme: "Give code clear responsibilities"
   summary: "Give functions, classes, and interfaces clear responsibilities. Explore cohesion, coupling, composition, and selected SOLID principles; connect UML and Mermaid class diagrams to implementation."
+  url: "/lessons/week-06/"
 - number: 7
   key: testing
   part: verify-and-improve

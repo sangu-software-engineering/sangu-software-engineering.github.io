@@ -1,0 +1,13 @@
+Software Engineering: 4 grades, 3 passing, average 60.3
+  Nino      87  passed
+  Luka      41  failed
+  Ana       63  passed
+  Giorgi    50  passed
+
+course,student,score,passing
+Software Engineering,Nino,87,true
+Software Engineering,Luka,41,false
+Software Engineering,Ana,63,true
+Software Engineering,Giorgi,50,true
+
+Refused: Already graded: Nino
