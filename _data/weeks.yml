@@ -51,6 +51,7 @@
   title: "Behaviour, testing, and debugging"
   theme: "Observe behaviour and investigate failures"
   summary: "Grow the first tests into deliberate test design with partitions, boundaries, and state transitions, and investigate errors with systematic debugging and regression tests."
+  url: "/lessons/week-07/"
 - number: 8
   key: quality
   part: verify-and-improve
